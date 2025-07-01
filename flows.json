@@ -2,7 +2,7 @@
     {
         "id": "49ef9935a0084879",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Cyclist 1",
         "disabled": false,
         "info": "",
         "env": []
@@ -123,42 +123,124 @@
         "className": ""
     },
     {
-        "id": "b15182c653ae9598",
-        "type": "ui_button",
+        "id": "fab7eefd92b5097f",
+        "type": "ui_tab",
+        "name": "Cyclist Dashboard",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "09ab234bed2ce55f",
+        "type": "ui_tab",
+        "name": "Cyclist Dashboard",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "c9285b115cb483f1",
+        "type": "ui_group",
+        "name": "Vitals",
+        "tab": "09ab234bed2ce55f",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d9aaf250ca9cf6c8",
+        "type": "inject",
         "z": "49ef9935a0084879",
-        "name": "button",
-        "group": "f2e47570d7e3d99e",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "label": "button",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "payload": "Welcome",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "x": 190,
+        "name": "timestamp-heart-rate",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "object",
+        "payloadType": "date",
+        "x": 240,
         "y": 100,
         "wires": [
             [
-                "14790cbf2e71c36d"
+                "440f97c3754adb30"
             ]
         ]
     },
     {
-        "id": "14790cbf2e71c36d",
-        "type": "ui_audio",
+        "id": "440f97c3754adb30",
+        "type": "function",
         "z": "49ef9935a0084879",
-        "name": "",
-        "group": "f2e47570d7e3d99e",
-        "voice": "",
-        "always": "",
-        "x": 380,
+        "name": "generate-heart-rate",
+        "func": "msg.payload = { heart_rate: Math.floor(60 + Math.random() * 80) };  // 60-140 bpm\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 100,
+        "wires": [
+            [
+                "a6ca0cec875f7971",
+                "22a064db95cca791"
+            ]
+        ]
+    },
+    {
+        "id": "a6ca0cec875f7971",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-heart-rate",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "22a064db95cca791",
+        "type": "ui_gauge",
+        "z": "49ef9935a0084879",
+        "name": "Heart Rate (bpm)",
+        "group": "c9285b115cb483f1",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Heart Rate (bpm)",
+        "label": "bpm",
+        "format": "{{value}}",
+        "min": "50",
+        "max": "200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "120",
+        "seg2": "160",
+        "diff": false,
+        "className": "",
+        "x": 830,
         "y": 100,
         "wires": []
     }
