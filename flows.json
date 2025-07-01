@@ -243,5 +243,32 @@
         "x": 830,
         "y": 100,
         "wires": []
+    },
+    {
+        "id": "7201a1e144ba78fd",
+        "type": "inject",
+        "z": "49ef9935a0084879",
+        "name": "timestamp-speed",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "object",
+        "payloadType": "date",
+        "x": 230,
+        "y": 260,
+        "wires": [
+            []
+        ]
     }
 ]
