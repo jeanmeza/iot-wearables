@@ -183,7 +183,7 @@
         "type": "function",
         "z": "49ef9935a0084879",
         "name": "generate-heart-rate",
-        "func": "msg.payload = { heart_rate: Math.floor(60 + Math.random() * 80) };  // 60-140 bpm\nreturn msg;",
+        "func": "// Get previous heart rate, or start at 80\nlet hr = flow.get(\"heart_rate\") || 90;\n\n// Apply a small random change: -2 to +2 bpm\nlet delta = (Math.random() * 4) - 2;\nhr = hr + delta;\n\n// Clamp value between 60 and 140\nhr = Math.max(75, Math.min(140, hr));\n\n// Save updated heart rate\nflow.set(\"heart_rate\", hr);\n\n// Round to integer bpm\nmsg.payload = Math.round(hr);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
