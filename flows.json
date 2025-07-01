@@ -8,14 +8,6 @@
         "env": []
     },
     {
-        "id": "cf2cf577a28d9373",
-        "type": "ui_tab",
-        "name": "Sub",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
-    },
-    {
         "id": "03e7604004065379",
         "type": "ui_base",
         "theme": {
@@ -112,6 +104,14 @@
         }
     },
     {
+        "id": "cf2cf577a28d9373",
+        "type": "ui_tab",
+        "name": "Sub",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
         "id": "f2e47570d7e3d99e",
         "type": "ui_group",
         "name": "Home",
@@ -161,34 +161,5 @@
         "x": 380,
         "y": 100,
         "wires": []
-    },
-    {
-        "id": "a28f4f484a02be8f",
-        "type": "ui_dropdown",
-        "z": "49ef9935a0084879",
-        "name": "",
-        "label": "",
-        "tooltip": "",
-        "place": "Select option",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "multiple": false,
-        "options": [
-            {
-                "value": "",
-                "label": ""
-            }
-        ],
-        "payload": "",
-        "topic": "topic",
-        "topicType": "msg",
-        "className": "",
-        "x": 310,
-        "y": 200,
-        "wires": [
-            []
-        ]
     }
 ]
