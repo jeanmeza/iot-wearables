@@ -2,7 +2,9 @@
     "name": "iot-wearables",
     "description": "A Node-RED Project",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-dashboard": "github:node-red/node-red-dashboard"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flows.json",
