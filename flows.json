@@ -150,10 +150,55 @@
         "className": ""
     },
     {
-        "id": "d9aaf250ca9cf6c8",
+        "id": "a6ca0cec875f7971",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-sensors-data",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "22a064db95cca791",
+        "type": "ui_gauge",
+        "z": "49ef9935a0084879",
+        "name": "Heart Rate (bpm)",
+        "group": "c9285b115cb483f1",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Heart-rate",
+        "label": "bpm",
+        "format": "",
+        "min": "50",
+        "max": "200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "100",
+        "seg2": "130",
+        "diff": false,
+        "className": "",
+        "x": 1010,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "7201a1e144ba78fd",
         "type": "inject",
         "z": "49ef9935a0084879",
-        "name": "timestamp-heart-rate",
+        "name": "timestamp-sensors",
         "props": [
             {
                 "p": "payload"
@@ -171,104 +216,59 @@
         "payload": "object",
         "payloadType": "date",
         "x": 240,
-        "y": 100,
+        "y": 260,
         "wires": [
             [
-                "440f97c3754adb30"
+                "0c4ff3594b832fb1"
             ]
         ]
     },
     {
-        "id": "440f97c3754adb30",
+        "id": "0c4ff3594b832fb1",
         "type": "function",
         "z": "49ef9935a0084879",
-        "name": "generate-heart-rate",
-        "func": "// Get previous heart rate, or start at 80\nlet hr = flow.get(\"heart_rate\") || 90;\n\n// Apply a small random change: -2 to +2 bpm\nlet delta = (Math.random() * 4) - 2;\nhr = hr + delta;\n\n// Clamp value between 60 and 140\nhr = Math.max(75, Math.min(140, hr));\n\n// Save updated heart rate\nflow.set(\"heart_rate\", hr);\n\n// Round to integer bpm\nmsg.payload = Math.round(hr);\nreturn msg;",
+        "name": "generate-sensors-data",
+        "func": "// --- Persistent cyclist state ---\nlet state = flow.get('cyclistState') || {\n    latitude: 44.4000,\n    longitude: 8.9300,\n    speed: 20.0, // km/h\n    cadence: 80, // rpm\n    gearRatio: 3.0,\n    heartRate: 100,\n    breathingRate: 16,\n    stressLevel: 0.4\n};\n\n// --- Update state with small variations ---\nstate.speed += (Math.random() - 0.5) * 2; // vary speed by ±1 km/h\nstate.speed = Math.max(10, Math.min(40, state.speed)); // limit 10-40 km/h\n\nstate.cadence = Math.round((state.speed / (state.gearRatio * 2.1 * 60 / 1000)) * 100) / 100;\nstate.cadence += (Math.random() - 0.5) * 5; // vary cadence slightly\nstate.cadence = Math.max(60, Math.min(110, state.cadence));\n\nstate.gearRatio += (Math.random() - 0.5) * 0.1; // small gear changes\nstate.gearRatio = Math.max(2, Math.min(4, state.gearRatio));\n\n// Update heart rate based on effort (speed + cadence)\nlet effort = (state.speed / 40) + (state.cadence / 110);\nstate.heartRate = 60 + Math.round(effort * 80);\nstate.heartRate += Math.round((Math.random() - 0.5) * 4); // slight variability\n\n// Breathing rate\nstate.breathingRate = 12 + Math.round(effort * 8);\n\n// Stress level\nstate.stressLevel = Math.min(1, Math.max(0, effort + (Math.random() - 0.5) * 0.1));\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\n\n// Move position (simulate movement)\nlet deltaLat = (Math.random() - 0.5) * 0.0001; \nlet deltaLon = (Math.random() - 0.5) * 0.0001;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save state ---\nflow.set('cyclistState', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: Math.round(state.speed * 10) / 10,\n    cadence: Math.round(state.cadence),\n    gearRatio: state.gearRatio.toFixed(2),\n    heartRate: state.heartRate,\n    breathingRate: state.breathingRate,\n    stressLevel: state.stressLevel\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
-        "y": 100,
+        "x": 480,
+        "y": 260,
         "wires": [
             [
                 "a6ca0cec875f7971",
-                "22a064db95cca791"
+                "c2e6335da047780e"
             ]
         ]
     },
     {
-        "id": "a6ca0cec875f7971",
-        "type": "debug",
+        "id": "c2e6335da047780e",
+        "type": "change",
         "z": "49ef9935a0084879",
-        "name": "debug-heart-rate",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 770,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "22a064db95cca791",
-        "type": "ui_gauge",
-        "z": "49ef9935a0084879",
-        "name": "Heart Rate (bpm)",
-        "group": "c9285b115cb483f1",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Heart Rate (bpm)",
-        "label": "bpm",
-        "format": "{{value}}",
-        "min": "50",
-        "max": "200",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "120",
-        "seg2": "160",
-        "diff": false,
-        "className": "",
-        "x": 830,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "7201a1e144ba78fd",
-        "type": "inject",
-        "z": "49ef9935a0084879",
-        "name": "timestamp-speed",
-        "props": [
+        "name": "",
+        "rules": [
             {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.heartRate",
+                "tot": "msg"
             }
         ],
-        "repeat": "1",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "object",
-        "payloadType": "date",
-        "x": 230,
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
         "y": 260,
         "wires": [
-            []
+            [
+                "22a064db95cca791"
+            ]
         ]
     }
 ]
