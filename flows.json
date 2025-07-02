@@ -16,7 +16,8 @@
                 "default": "#0094CE",
                 "baseColor": "#0094CE",
                 "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
+                "edited": true,
+                "reset": false
             },
             "darkTheme": {
                 "default": "#097479",
@@ -163,13 +164,14 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 780,
-        "y": 200,
+        "y": 100,
         "wires": []
     },
     {
         "id": "22a064db95cca791",
         "type": "ui_gauge",
         "z": "49ef9935a0084879",
+        "d": true,
         "name": "Heart Rate (bpm)",
         "group": "c9285b115cb483f1",
         "order": 0,
@@ -191,7 +193,7 @@
         "diff": false,
         "className": "",
         "x": 1010,
-        "y": 260,
+        "y": 200,
         "wires": []
     },
     {
@@ -268,10 +270,11 @@
         "to": "",
         "reg": false,
         "x": 770,
-        "y": 260,
+        "y": 200,
         "wires": [
             [
-                "22a064db95cca791"
+                "22a064db95cca791",
+                "b0d330a56d92b095"
             ]
         ]
     },
@@ -401,7 +404,8 @@
         "y": 620,
         "wires": [
             [
-                "676796128dc22821"
+                "676796128dc22821",
+                "fc6d2ce79cdd3596"
             ]
         ]
     },
@@ -438,6 +442,7 @@
         "id": "676796128dc22821",
         "type": "ui_gauge",
         "z": "49ef9935a0084879",
+        "d": true,
         "name": "Gear-ratio",
         "group": "c9285b115cb483f1",
         "order": 3,
@@ -482,10 +487,11 @@
         "to": "",
         "reg": false,
         "x": 760,
-        "y": 680,
+        "y": 740,
         "wires": [
             [
-                "e30b3bfaa824227e"
+                "e30b3bfaa824227e",
+                "edc0946c36782a00"
             ]
         ]
     },
@@ -493,6 +499,7 @@
         "id": "e30b3bfaa824227e",
         "type": "ui_gauge",
         "z": "49ef9935a0084879",
+        "d": true,
         "name": "Breathing-rate",
         "group": "c9285b115cb483f1",
         "order": 4,
@@ -514,7 +521,7 @@
         "diff": false,
         "className": "",
         "x": 1000,
-        "y": 680,
+        "y": 740,
         "wires": []
     },
     {
@@ -526,7 +533,7 @@
         "order": 5,
         "width": 0,
         "height": 0,
-        "format": "<div id=\"cadenceGaugeContainer\" style=\"width: 100%; max-width: 230px; margin: auto; position: relative;\">\n  <canvas id=\"cadenceGauge\"></canvas>\n  <canvas id=\"cadencePointer\" style=\"position: absolute; top: 0; left: 0;\"></canvas>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n\n<script>\n(function(scope) {\n  const gaugeCanvas = document.getElementById('cadenceGauge');\n  const pointerCanvas = document.getElementById('cadencePointer');\n  pointerCanvas.width = gaugeCanvas.width = 230;\n  pointerCanvas.height = gaugeCanvas.height = 230; // Full circle height\n\n  if (!scope.cadenceGaugeChart) {\n    const ctx = gaugeCanvas.getContext('2d');\n    scope.cadenceGaugeChart = new Chart(ctx, {\n      type: 'doughnut',\n      data: {\n        labels: ['', '', '', ''],\n        datasets: [{\n          data: [25, 40, 10, 25],\n          backgroundColor: ['#FF0000', '#00FF00', '#FFFF00', '#FF0000'],\n          borderWidth: 0\n        }]\n      },\n      options: {\n        rotation: 270,\n        circumference: 180,\n        cutout: '65%',\n        plugins: {\n          tooltip: { enabled: false },\n          legend: { display: false },\n          title: {\n            display: true,\n            text: 'Cadence (rpm)',\n            font: { size: 18 }\n          }\n        }\n      }\n    });\n\n    gaugeCanvas.insertAdjacentHTML('afterend', \n      '<div id=\"cadenceGaugeValue\" style=\"position: absolute; width: 100%; top: 90%; text-align: center; font-size: 16px; font-weight: bold;\"></div>'\n    );\n  }\n\n  function drawPointer(angle) {\n    const ctx = pointerCanvas.getContext('2d');\n    ctx.clearRect(0, 0, pointerCanvas.width, pointerCanvas.height);\n    ctx.strokeStyle = 'black';\n    ctx.lineWidth = 2;\n    \n    ctx.save();\n    // Translate to bottom center\n    ctx.translate(pointerCanvas.width / 2, pointerCanvas.height - 40);\n    ctx.rotate(angle);\n    \n    ctx.beginPath();\n    ctx.moveTo(0, 0);\n    ctx.lineTo(0, -100);\n    ctx.stroke();\n    \n    ctx.restore();\n  }\n\n  scope.$watch('msg.payload', function(cadence) {\n    if (typeof cadence === 'number') {\n      document.getElementById('cadenceGaugeValue').innerText = cadence + ' rpm';\n\n      let clamped = Math.max(0, Math.min(150, cadence));\n      let angle = (clamped / 150) * Math.PI; // 0 to PI\n      angle = angle - Math.PI / 2; // make 0 on left\n\n      drawPointer(angle);\n    }\n  });\n})(scope);\n</script>\n",
+        "format": "<div id=\"cadenceGaugeContainer\"></div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script src=\"/MulticolorGauge.js\"></script>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'cadenceGaugeContainer',\n      labels: ['Slow', 'Optimal', 'Fast', 'Very Fast'],\n      data: [25, 40, 10, 25],\n      colors: ['#FF0000', '#00FF00', '#FFFF00', '#FF0000'],\n      title: 'Cadence (rpm)',\n      pointerColor: 'black',\n      units: ' rpm',\n      min: 0,\n      max: 150\n    };\n\n    const cadenceGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(cadence) {\n      if (typeof cadence === 'number') {\n        cadenceGauge.update(cadence);\n      }\n    });\n  })(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -547,7 +554,7 @@
         "order": 6,
         "width": 0,
         "height": 0,
-        "format": "<div id=\"speedGaugeContainer\" style=\"width: 100%; max-width: 230px; margin: auto; position: relative;\">\n    <canvas id=\"speedGauge\"></canvas>\n    <canvas id=\"speedPointer\" style=\"position: absolute; top: 0; left: 0;\"></canvas>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n\n<script>\n    (function(scope) {\n  const gaugeCanvas = document.getElementById('speedGauge');\n  const pointerCanvas = document.getElementById('speedPointer');\n  pointerCanvas.width = gaugeCanvas.width = 230;\n  pointerCanvas.height = gaugeCanvas.height = 230;\n\n  if (!scope.speedGaugeChart) {\n    const ctx = gaugeCanvas.getContext('2d');\n    scope.speedGaugeChart = new Chart(ctx, {\n      type: 'doughnut',\n      data: {\n        labels: ['', '', '', ''],\n        datasets: [{\n          data: [10, 15, 15, 20], // 0-10, 10-25, 25-40, 40+\n          backgroundColor: ['#FF0000', '#FFFF00', '#00FF00', '#FF0000'],\n          borderWidth: 0\n        }]\n      },\n      options: {\n        rotation: 270,\n        circumference: 180,\n        cutout: '65%',\n        plugins: {\n          tooltip: { enabled: false },\n          legend: { display: false },\n          title: {\n            display: true,\n            text: 'Speed (km/h)',\n            font: { size: 18 }\n          }\n        }\n      }\n    });\n\n    gaugeCanvas.insertAdjacentHTML('afterend', \n      '<div id=\"speedGaugeValue\" style=\"position: absolute; width: 100%; top: 90%; text-align: center; font-size: 16px; font-weight: bold;\"></div>'\n    );\n  }\n\n  function drawPointer(angle) {\n    const ctx = pointerCanvas.getContext('2d');\n    ctx.clearRect(0, 0, pointerCanvas.width, pointerCanvas.height);\n    ctx.strokeStyle = 'black';\n    ctx.lineWidth = 2;\n    \n    ctx.save();\n    ctx.translate(pointerCanvas.width / 2, pointerCanvas.height - 40);\n    ctx.rotate(angle);\n    \n    ctx.beginPath();\n    ctx.moveTo(0, 0);\n    ctx.lineTo(0, -100);\n    ctx.stroke();\n    \n    ctx.restore();\n  }\n\n  scope.$watch('msg.payload', function(speed) {\n    if (typeof speed === 'number') {\n      document.getElementById('speedGaugeValue').innerText = speed.toFixed(1) + ' km/h';\n\n      let clamped = Math.max(0, Math.min(50, speed)); // cap at 50 km/h\n      let angle = (clamped / 50) * Math.PI; // 0 to PI\n      angle = angle - Math.PI / 2;\n\n      drawPointer(angle);\n    }\n  });\n})(scope);\n</script>",
+        "format": "<div id=\"speedGaugeContainer\"></div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script src=\"/MulticolorGauge.js\"></script>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'speedGaugeContainer',\n      labels: ['', '', '', ''],\n      data: [10, 15, 15, 20], // segments: 0-10, 10-25, 25-40, 40-50+\n      colors: ['#FF0000', '#FFFF00', '#00FF00', '#FF0000'],\n      title: 'Speed (km/h)',\n      pointerColor: 'black',\n      units: ' km/h',\n      min: 0,\n      max: 50\n    };\n\n    const speedGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(speed) {\n      if (typeof speed === 'number') {\n        speedGauge.update(speed);\n      }\n    });\n  })(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -555,6 +562,69 @@
         "className": "",
         "x": 970,
         "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0d330a56d92b095",
+        "type": "ui_template",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "name": "Heart rate",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"heartRateGaugeContainer\"></div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script src=\"/MulticolorGauge.js\"></script>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'heartRateGaugeContainer',\n      labels: ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Maximum'],\n      data: [60, 70, 130, 150],\n      colors: ['#FF0000', '#FFFF00', '#00FF00', '#FF0000'],\n      title: 'Heart Rate (bpm)',\n      pointerColor: 'black',\n      units: ' bpm',\n      min: 0, \n      max: 190 \n    };\n\n    const heartRateGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(heartRate) {\n      if (typeof heartRate === 'number') {\n        heartRateGauge.update(heartRate);\n      }\n    });\n  })(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 980,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "edc0946c36782a00",
+        "type": "ui_template",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "name": "Breating-rate",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"breathingRateGaugeContainer\"></div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script src=\"/MulticolorGauge.js\"></script>\n\n<script>\n    (function(scope) {\n    const config = {\n      containerId: 'breathingRateGaugeContainer',\n      labels: ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Maximum'],\n      data: [20, 30, 40, 50],\n      colors: ['#00FF00', '#FFFF00', '#FFA500', '#FF0000'], // green, yellow, orange, red\n      title: 'Breathing Rate (bpm)',\n      pointerColor: 'black',\n      units: ' bpm',\n      min: 0,\n      max: 60\n    };\n\n    const breathingRateGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(breathingRate) {\n      if (typeof breathingRate === 'number') {\n        breathingRateGauge.update(breathingRate);\n      }\n    });\n  })(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 990,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc6d2ce79cdd3596",
+        "type": "ui_template",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "name": "Gear-ratio",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "format": "<div id=\"gearRatioGaugeContainer\"></div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script src=\"/MulticolorGauge.js\"></script>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'gearRatioGaugeContainer',\n      labels: ['Low', 'Moderate', 'High'],\n      data: [2.0, 3.0],\n      colors: ['#00FF00', '#FFFF00', '#FF0000'], // green: low, yellow: moderate, red: high\n      title: 'Gear Ratio',\n      pointerColor: 'black',\n      units: '',\n      min: 1.0,\n      max: 5.0\n    };\n\n    const gearRatioGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(gearRatio) {\n      if (typeof gearRatio === 'number') {\n        gearRatioGauge.update(gearRatio);\n      }\n    });\n  })(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 980,
+        "y": 680,
         "wires": [
             []
         ]
