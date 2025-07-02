@@ -3,5 +3,20 @@ iot-wearables
 
 ### About
 
-This is your project's README.md file. It helps users understand what your
-project does, how to use it and anything else they may need to know.
+
+# Settings
+
+1. change the setting.js file in ~/<your username>/.node-red/ path to this:
+
+```bash
+module.exports = {
+  httpStatic: '/home/<your username>/.node-red/public/',
+  editorTheme: {
+    projects: {
+      enabled: true,
+    },
+  },
+};
+```
+
+2. Add the `public` directory provided in this project to `~/<your username>/.node-red/` path.
