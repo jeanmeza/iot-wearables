@@ -178,7 +178,7 @@
         "gtype": "gage",
         "title": "Heart-rate",
         "label": "bpm",
-        "format": "",
+        "format": "{{value}}",
         "min": "50",
         "max": "200",
         "colors": [
@@ -228,7 +228,7 @@
         "type": "function",
         "z": "49ef9935a0084879",
         "name": "generate-sensors-data",
-        "func": "// --- Persistent cyclist state ---\nlet state = flow.get('cyclistState') || {\n    latitude: 44.4000,\n    longitude: 8.9300,\n    speed: 20.0, // km/h\n    cadence: 80, // rpm\n    gearRatio: 3.0,\n    heartRate: 100,\n    breathingRate: 16,\n    stressLevel: 0.4\n};\n\n// --- Update state with small variations ---\nstate.speed += (Math.random() - 0.5) * 2; // vary speed by ±1 km/h\nstate.speed = Math.max(10, Math.min(40, state.speed)); // limit 10-40 km/h\n\nstate.cadence = Math.round((state.speed / (state.gearRatio * 2.1 * 60 / 1000)) * 100) / 100;\nstate.cadence += (Math.random() - 0.5) * 5; // vary cadence slightly\nstate.cadence = Math.max(60, Math.min(110, state.cadence));\n\nstate.gearRatio += (Math.random() - 0.5) * 0.1; // small gear changes\nstate.gearRatio = Math.max(2, Math.min(4, state.gearRatio));\n\n// Update heart rate based on effort (speed + cadence)\nlet effort = (state.speed / 40) + (state.cadence / 110);\nstate.heartRate = 60 + Math.round(effort * 80);\nstate.heartRate += Math.round((Math.random() - 0.5) * 4); // slight variability\n\n// Breathing rate\nstate.breathingRate = 12 + Math.round(effort * 8);\n\n// Stress level\nstate.stressLevel = Math.min(1, Math.max(0, effort + (Math.random() - 0.5) * 0.1));\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\n\n// Move position (simulate movement)\nlet deltaLat = (Math.random() - 0.5) * 0.0001; \nlet deltaLon = (Math.random() - 0.5) * 0.0001;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save state ---\nflow.set('cyclistState', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: Math.round(state.speed * 10) / 10,\n    cadence: Math.round(state.cadence),\n    gearRatio: state.gearRatio.toFixed(2),\n    heartRate: state.heartRate,\n    breathingRate: state.breathingRate,\n    stressLevel: state.stressLevel\n};\n\nreturn msg;",
+        "func": "// --- Persistent cyclist state ---\nlet state = flow.get('cyclistState') || {\n    latitude: 44.4000,\n    longitude: 8.9300,\n    speed: 20.0,        // km/h\n    cadence: 80.0,      // rpm\n    gearRatio: 3.0,\n    heartRate: 100.0,\n    breathingRate: 16.0,\n    stressLevel: 0.4\n};\n\n// --- Helper to apply smooth variation ---\nfunction smoothChange(value, target, maxDelta) {\n    let delta = target - value;\n    delta = Math.max(-maxDelta, Math.min(maxDelta, delta));\n    return value + delta;\n}\n\n// --- Set new targets with small random walk ---\nstate._targetSpeed = state._targetSpeed || state.speed;\nstate._targetGearRatio = state._targetGearRatio || state.gearRatio;\n\nstate._targetSpeed += (Math.random() - 0.5) * 0.5;\nstate._targetSpeed = Math.max(10, Math.min(40, state._targetSpeed));\n\n// --- Bias gear ratio toward higher at higher speeds ---\nlet desiredGear = 2 + ((state.speed - 10) / 30) * (4 - 2);\ndesiredGear = Math.max(2, Math.min(4, desiredGear));\nstate._targetGearRatio = smoothChange(state._targetGearRatio, desiredGear, 0.05);\n\n// Add small natural variation\nstate._targetGearRatio += (Math.random() - 0.5) * 0.01;\nstate._targetGearRatio = Math.max(2, Math.min(4, state._targetGearRatio));\n\n// --- Smooth update ---\nstate.speed = smoothChange(state.speed, state._targetSpeed, 0.1);\nstate.gearRatio = smoothChange(state.gearRatio, state._targetGearRatio, 0.02);\n\n// cadence based on speed + gear\nlet speed_m_min = (state.speed * 1000) / 60;\nlet targetCadence = speed_m_min / (state.gearRatio * 2.1);\ntargetCadence = Math.max(60, Math.min(110, targetCadence));\nstate.cadence = smoothChange(state.cadence, targetCadence, 1);\nstate.cadence = Math.max(60, Math.min(110, state.cadence)); // ensure limit after smooth\n\n// heart rate: scaled effort\nlet effort = 0.5 * (state.speed / 40) + 0.5 * (state.cadence / 110);\neffort = Math.min(1, effort);\nlet targetHR = 60 + effort * 80;\ntargetHR = Math.min(180, targetHR);\nstate.heartRate = smoothChange(state.heartRate, targetHR, 1);\nstate.heartRate = Math.min(180, Math.max(60, state.heartRate));\n\n// breathing rate\nlet targetBR = 12 + effort * 8;\nstate.breathingRate = smoothChange(state.breathingRate, targetBR, 0.2);\nstate.breathingRate = Math.max(12, Math.min(20, state.breathingRate));\n\n// stress level\nlet targetStress = effort;\nstate.stressLevel = smoothChange(state.stressLevel, targetStress, 0.01);\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\nstate.stressLevel = Math.min(1, Math.max(0, state.stressLevel));\n\n// position (tiny movement)\nlet deltaLat = (Math.random() - 0.5) * 0.00002; \nlet deltaLon = (Math.random() - 0.5) * 0.00002;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save ---\nflow.set('cyclistState', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: +(state.speed.toFixed(1)),\n    cadence: Math.round(state.cadence),\n    gearRatio: +(state.gearRatio.toFixed(2)),\n    heartRate: Math.round(state.heartRate),\n    breathingRate: +(state.breathingRate.toFixed(1)),\n    stressLevel: state.stressLevel\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -241,7 +241,9 @@
             [
                 "a6ca0cec875f7971",
                 "c2e6335da047780e",
-                "e4b73ed3cf9b77c5"
+                "e4b73ed3cf9b77c5",
+                "5b63754e9d5412c9",
+                "c1e7ebbe5b022198"
             ]
         ]
     },
@@ -295,29 +297,134 @@
         "y": 320,
         "wires": [
             [
-                "64a2e90212e9cd72"
+                "cd52c396adb8929c"
             ]
         ]
     },
     {
-        "id": "64a2e90212e9cd72",
-        "type": "ui_template",
+        "id": "96fa74bada67238e",
+        "type": "ui_gauge",
         "z": "49ef9935a0084879",
+        "name": "Cadence (rpm)",
         "group": "c9285b115cb483f1",
-        "name": "Speedometer",
-        "order": 1,
+        "order": 2,
         "width": 0,
         "height": 0,
-        "format": "<canvas id=\"speedometer\" data-type=\"radial-gauge\" data-width=\"300\" data-height=\"300\" data-units=\"km/h\"\n    data-min-value=\"0\" data-max-value=\"60\" data-major-ticks=\"0,10,20,30,40,50,60\" data-minor-ticks=\"2\"\n    data-stroke-ticks=\"true\" data-highlights='[\n      { \"from\": 40, \"to\": 60, \"color\": \"rgba(200, 50, 50, .75)\" }\n  ]' data-color-plate=\"#fff\" data-color-major-ticks=\"#000\" data-color-minor-ticks=\"#000\" data-color-title=\"#000\"\n    data-color-units=\"#000\" data-color-numbers=\"#000\" data-color-needle-start=\"rgba(240, 128, 128, 1)\"\n    data-color-needle-end=\"rgba(255, 160, 122, .9)\" data-value=\"0\"></canvas>\n\n<script src=\"https://cdn.jsdelivr.net/npm/canvas-gauges/gauge.min.js\"></script>\n<script>\n    (function(scope){\n    scope.$watch('msg.payload', function(value) {\n        var gauge = document.gauges.get('speedometer');\n        if(gauge) {\n            gauge.value = value;\n        }\n    });\n})(scope);\n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
+        "gtype": "gage",
+        "title": "Cadence (rpm)",
+        "label": "rpm",
+        "format": "{{value}}",
+        "min": "60",
+        "max": "110",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "75",
+        "seg2": "90",
+        "diff": false,
         "className": "",
-        "x": 980,
-        "y": 320,
+        "x": 1000,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "5b63754e9d5412c9",
+        "type": "change",
+        "z": "49ef9935a0084879",
+        "name": "change-cadence",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.cadence",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 380,
+        "wires": [
+            [
+                "96fa74bada67238e",
+                "131e8b9dc0c822c3"
+            ]
+        ]
+    },
+    {
+        "id": "131e8b9dc0c822c3",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-change-cadence",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c1e7ebbe5b022198",
+        "type": "change",
+        "z": "49ef9935a0084879",
+        "name": "Gear-ratio",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.gearRatio",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 500,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "cd52c396adb8929c",
+        "type": "ui_gauge",
+        "z": "49ef9935a0084879",
+        "name": "Speed",
+        "group": "c9285b115cb483f1",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Speed",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "80",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "20",
+        "seg2": "35",
+        "diff": false,
+        "className": "",
+        "x": 970,
+        "y": 320,
+        "wires": []
     }
 ]
