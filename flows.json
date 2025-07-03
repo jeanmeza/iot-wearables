@@ -277,7 +277,8 @@
         "wires": [
             [
                 "22a064db95cca791",
-                "b0d330a56d92b095"
+                "b0d330a56d92b095",
+                "1462cc644e7a8637"
             ]
         ]
     },
@@ -649,6 +650,50 @@
         "className": "",
         "x": 200,
         "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1462cc644e7a8637",
+        "type": "ui_chart",
+        "z": "49ef9935a0084879",
+        "name": "Hear-rate chart",
+        "group": "c9285b115cb483f1",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "label": "Hear-rate chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "200",
+        "removeOlder": "2",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#f66151",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1000,
+        "y": 140,
         "wires": [
             []
         ]
