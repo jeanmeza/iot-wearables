@@ -278,7 +278,8 @@
             [
                 "22a064db95cca791",
                 "b0d330a56d92b095",
-                "1462cc644e7a8637"
+                "1462cc644e7a8637",
+                "e452c6a1dc7e8435"
             ]
         ]
     },
@@ -302,11 +303,13 @@
         "to": "",
         "reg": false,
         "x": 760,
-        "y": 440,
+        "y": 480,
         "wires": [
             [
                 "cd52c396adb8929c",
-                "5b8260e8b0b7df67"
+                "5b8260e8b0b7df67",
+                "becd17faa209dea7",
+                "59c05579e0c61a16"
             ]
         ]
     },
@@ -336,7 +339,7 @@
         "diff": false,
         "className": "",
         "x": 1000,
-        "y": 620,
+        "y": 820,
         "wires": []
     },
     {
@@ -359,12 +362,14 @@
         "to": "",
         "reg": false,
         "x": 770,
-        "y": 620,
+        "y": 820,
         "wires": [
             [
                 "96fa74bada67238e",
                 "131e8b9dc0c822c3",
-                "5a6b27a5a350bdfb"
+                "5a6b27a5a350bdfb",
+                "1431018d7055a37e",
+                "46c2a1dc62d97cf4"
             ]
         ]
     },
@@ -382,7 +387,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1030,
-        "y": 680,
+        "y": 880,
         "wires": []
     },
     {
@@ -405,11 +410,13 @@
         "to": "",
         "reg": false,
         "x": 740,
-        "y": 740,
+        "y": 1060,
         "wires": [
             [
                 "676796128dc22821",
-                "fc6d2ce79cdd3596"
+                "fc6d2ce79cdd3596",
+                "8fe45d91916ae1a9",
+                "9415b62948f8c120"
             ]
         ]
     },
@@ -439,7 +446,7 @@
         "diff": false,
         "className": "",
         "x": 970,
-        "y": 440,
+        "y": 520,
         "wires": []
     },
     {
@@ -468,7 +475,7 @@
         "diff": false,
         "className": "",
         "x": 980,
-        "y": 740,
+        "y": 1060,
         "wires": []
     },
     {
@@ -491,11 +498,13 @@
         "to": "",
         "reg": false,
         "x": 760,
-        "y": 860,
+        "y": 1300,
         "wires": [
             [
                 "e30b3bfaa824227e",
-                "edc0946c36782a00"
+                "edc0946c36782a00",
+                "7a561cec02a71d51",
+                "aa32617a3f2ee30a"
             ]
         ]
     },
@@ -525,7 +534,7 @@
         "diff": false,
         "className": "",
         "x": 1000,
-        "y": 860,
+        "y": 1300,
         "wires": []
     },
     {
@@ -545,7 +554,7 @@
         "templateScope": "local",
         "className": "",
         "x": 980,
-        "y": 560,
+        "y": 760,
         "wires": [
             []
         ]
@@ -567,7 +576,7 @@
         "templateScope": "local",
         "className": "",
         "x": 970,
-        "y": 500,
+        "y": 580,
         "wires": [
             []
         ]
@@ -611,7 +620,7 @@
         "templateScope": "local",
         "className": "",
         "x": 990,
-        "y": 920,
+        "y": 1360,
         "wires": [
             []
         ]
@@ -633,7 +642,7 @@
         "templateScope": "local",
         "className": "",
         "x": 980,
-        "y": 800,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -678,7 +687,7 @@
         "dot": false,
         "ymin": "0",
         "ymax": "200",
-        "removeOlder": "2",
+        "removeOlder": "1",
         "removeOlderPoints": "",
         "removeOlderUnit": "3600",
         "cutout": 0,
@@ -700,6 +709,527 @@
         "className": "",
         "x": 1000,
         "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e452c6a1dc7e8435",
+        "type": "ui_artlessgauge2",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "name": "Heart-rate",
+        "icon": "",
+        "label": "Heart-rate",
+        "unit": "bpm",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 110,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 160,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 980,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "becd17faa209dea7",
+        "type": "ui_artlessgauge2",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "order": 12,
+        "width": 0,
+        "height": 0,
+        "name": "Speed",
+        "icon": "",
+        "label": "Speed",
+        "unit": "km/h",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 8,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 30,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 70,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 970,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "59c05579e0c61a16",
+        "type": "ui_chart",
+        "z": "49ef9935a0084879",
+        "name": "Speed",
+        "group": "c9285b115cb483f1",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "label": "Speed",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "70",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 970,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1431018d7055a37e",
+        "type": "ui_chart",
+        "z": "49ef9935a0084879",
+        "name": "Cadence",
+        "group": "c9285b115cb483f1",
+        "order": 14,
+        "width": 0,
+        "height": 0,
+        "label": "Cadence",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "200",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#62a0ea",
+            "#aec7e8",
+            "#ffbe6f",
+            "#57e389",
+            "#98df8a",
+            "#f66151",
+            "#ff9896",
+            "#9467bd",
+            "#dc8add"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 980,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "46c2a1dc62d97cf4",
+        "type": "ui_artlessgauge2",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "order": 15,
+        "width": 0,
+        "height": 0,
+        "name": "Cadence",
+        "icon": "",
+        "label": "Cadence",
+        "unit": "rpm",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 100,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 980,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "8fe45d91916ae1a9",
+        "type": "ui_artlessgauge2",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "order": 16,
+        "width": 0,
+        "height": 0,
+        "name": "Gear-ratio",
+        "icon": "",
+        "label": "Gear-ratio",
+        "unit": "",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 1,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 2,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 3,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 4,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 6,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 980,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "7a561cec02a71d51",
+        "type": "ui_artlessgauge2",
+        "z": "49ef9935a0084879",
+        "group": "c9285b115cb483f1",
+        "order": 19,
+        "width": 0,
+        "height": 0,
+        "name": "Breath-rate",
+        "icon": "",
+        "label": "Breath-rate",
+        "unit": "",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 990,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "9415b62948f8c120",
+        "type": "ui_chart",
+        "z": "49ef9935a0084879",
+        "name": "Gear-ratio",
+        "group": "c9285b115cb483f1",
+        "order": 17,
+        "width": 0,
+        "height": 0,
+        "label": "Gear-ratio",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "6",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 980,
+        "y": 1000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aa32617a3f2ee30a",
+        "type": "ui_chart",
+        "z": "49ef9935a0084879",
+        "name": "Breath-rate",
+        "group": "c9285b115cb483f1",
+        "order": 18,
+        "width": 0,
+        "height": 0,
+        "label": "Breath-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "80",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 990,
+        "y": 1180,
         "wires": [
             []
         ]
