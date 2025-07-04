@@ -181,11 +181,42 @@
         "className": ""
     },
     {
+        "id": "bc626649c953509f",
+        "type": "mqtt-broker",
+        "name": "test.mosquitto.org",
+        "broker": "test.mosquitto.org",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
         "id": "a6ca0cec875f7971",
         "type": "debug",
         "z": "49ef9935a0084879",
         "name": "debug-sensors-data-c1",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -201,6 +232,7 @@
         "id": "7201a1e144ba78fd",
         "type": "inject",
         "z": "49ef9935a0084879",
+        "d": true,
         "name": "timestamp-sensors-c1",
         "props": [
             {
@@ -230,6 +262,7 @@
         "id": "0c4ff3594b832fb1",
         "type": "function",
         "z": "49ef9935a0084879",
+        "d": true,
         "name": "generate-sensors-data-c1",
         "func": "// --- Persistent cyclist state ---\nlet state = flow.get('Cyclist1.state') || {\n    latitude: 44.4000,\n    longitude: 8.9300,\n    speed: 20.0,        // km/h\n    cadence: 80.0,      // rpm\n    gearRatio: 3.0,\n    heartRate: 100.0,\n    breathingRate: 16.0,\n    stressLevel: 0.4\n};\n\n// --- Helper to apply smooth variation ---\nfunction smoothChange(value, target, maxDelta) {\n    let delta = target - value;\n    delta = Math.max(-maxDelta, Math.min(maxDelta, delta));\n    return value + delta;\n}\n\n// --- Set new targets with small random walk ---\nstate._targetSpeed = state._targetSpeed || state.speed;\nstate._targetGearRatio = state._targetGearRatio || state.gearRatio;\n\nstate._targetSpeed += (Math.random() - 0.5) * 0.5;\nstate._targetSpeed = Math.max(10, Math.min(40, state._targetSpeed));\n\n// --- Bias gear ratio toward higher at higher speeds ---\nlet desiredGear = 2 + ((state.speed - 10) / 30) * (4 - 2);\ndesiredGear = Math.max(2, Math.min(4, desiredGear));\nstate._targetGearRatio = smoothChange(state._targetGearRatio, desiredGear, 0.05);\n\n// Add small natural variation\nstate._targetGearRatio += (Math.random() - 0.5) * 0.01;\nstate._targetGearRatio = Math.max(2, Math.min(4, state._targetGearRatio));\n\n// --- Smooth update ---\nstate.speed = smoothChange(state.speed, state._targetSpeed, 0.1);\nstate.gearRatio = smoothChange(state.gearRatio, state._targetGearRatio, 0.02);\n\n// cadence based on speed + gear\nlet speed_m_min = (state.speed * 1000) / 60;\nlet targetCadence = speed_m_min / (state.gearRatio * 2.1);\ntargetCadence = Math.max(60, Math.min(110, targetCadence));\nstate.cadence = smoothChange(state.cadence, targetCadence, 1);\nstate.cadence = Math.max(60, Math.min(110, state.cadence));\n\n// heart rate: scaled effort\nlet effort = 0.5 * (state.speed / 40) + 0.5 * (state.cadence / 110);\neffort = Math.min(1, effort);\nlet targetHR = 60 + effort * 80;\ntargetHR = Math.min(180, targetHR);\nstate.heartRate = smoothChange(state.heartRate, targetHR, 2);\nstate.heartRate = Math.min(180, Math.max(60, state.heartRate));\n\n// breathing rate\nlet targetBR = 12 + effort * 8;\nstate.breathingRate = smoothChange(state.breathingRate, targetBR, 0.2);\nstate.breathingRate = Math.max(12, Math.min(20, state.breathingRate));\n\n// stress level\nlet targetStress = effort;\nstate.stressLevel = smoothChange(state.stressLevel, targetStress, 0.01);\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\nstate.stressLevel = Math.min(1, Math.max(0, state.stressLevel));\n\n// position (tiny movement)\nlet deltaLat = (Math.random() - 0.5) * 0.00002; \nlet deltaLon = (Math.random() - 0.5) * 0.00002;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save ---\nflow.set('Cyclist1', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: +(state.speed.toFixed(1)),\n    cadence: Math.round(state.cadence),\n    gearRatio: +(state.gearRatio.toFixed(2)),\n    heartRate: Math.round(state.heartRate),\n    breathingRate: +(state.breathingRate.toFixed(1)),\n    stressLevel: state.stressLevel\n};\n\nreturn msg;\n",
         "outputs": 1,
@@ -1050,6 +1083,44 @@
         "wires": []
     },
     {
+        "id": "4d65577a5151ce73",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-heartbeat-rate",
+        "topic": "sensor/health",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 470,
+        "y": 180,
+        "wires": [
+            [
+                "c2e6335da047780e",
+                "a6ca0cec875f7971"
+            ]
+        ]
+    },
+    {
+        "id": "a401dc2d76dac31a",
+        "type": "mqtt in JSON",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-heartbeat-rate-json",
+        "topic": "sensor/health",
+        "qos": "2",
+        "broker": "bc626649c953509f",
+        "ignoreempty": true,
+        "removemqttconfig": false,
+        "x": 480,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "fae7ec1bee79ab61",
         "type": "debug",
         "z": "ddbfc14646ad5a06",
@@ -1702,7 +1773,7 @@
         "type": "debug",
         "z": "ddbfc14646ad5a06",
         "name": "debug-gear-ratio",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
