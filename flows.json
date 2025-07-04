@@ -302,7 +302,7 @@
         "to": "",
         "reg": false,
         "x": 760,
-        "y": 320,
+        "y": 440,
         "wires": [
             [
                 "cd52c396adb8929c",
@@ -336,7 +336,7 @@
         "diff": false,
         "className": "",
         "x": 1000,
-        "y": 500,
+        "y": 620,
         "wires": []
     },
     {
@@ -359,7 +359,7 @@
         "to": "",
         "reg": false,
         "x": 770,
-        "y": 500,
+        "y": 620,
         "wires": [
             [
                 "96fa74bada67238e",
@@ -382,7 +382,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1030,
-        "y": 560,
+        "y": 680,
         "wires": []
     },
     {
@@ -405,7 +405,7 @@
         "to": "",
         "reg": false,
         "x": 740,
-        "y": 620,
+        "y": 740,
         "wires": [
             [
                 "676796128dc22821",
@@ -439,7 +439,7 @@
         "diff": false,
         "className": "",
         "x": 970,
-        "y": 320,
+        "y": 440,
         "wires": []
     },
     {
@@ -468,7 +468,7 @@
         "diff": false,
         "className": "",
         "x": 980,
-        "y": 620,
+        "y": 740,
         "wires": []
     },
     {
@@ -491,7 +491,7 @@
         "to": "",
         "reg": false,
         "x": 760,
-        "y": 740,
+        "y": 860,
         "wires": [
             [
                 "e30b3bfaa824227e",
@@ -525,13 +525,14 @@
         "diff": false,
         "className": "",
         "x": 1000,
-        "y": 740,
+        "y": 860,
         "wires": []
     },
     {
         "id": "5a6b27a5a350bdfb",
         "type": "ui_template",
         "z": "49ef9935a0084879",
+        "d": true,
         "group": "c9285b115cb483f1",
         "name": "Cadence",
         "order": 5,
@@ -544,7 +545,7 @@
         "templateScope": "local",
         "className": "",
         "x": 980,
-        "y": 440,
+        "y": 560,
         "wires": [
             []
         ]
@@ -553,6 +554,7 @@
         "id": "5b8260e8b0b7df67",
         "type": "ui_template",
         "z": "49ef9935a0084879",
+        "d": true,
         "group": "c9285b115cb483f1",
         "name": "Speed",
         "order": 6,
@@ -565,7 +567,7 @@
         "templateScope": "local",
         "className": "",
         "x": 970,
-        "y": 380,
+        "y": 500,
         "wires": [
             []
         ]
@@ -574,6 +576,7 @@
         "id": "b0d330a56d92b095",
         "type": "ui_template",
         "z": "49ef9935a0084879",
+        "d": true,
         "group": "c9285b115cb483f1",
         "name": "Heart rate",
         "order": 7,
@@ -595,6 +598,7 @@
         "id": "edc0946c36782a00",
         "type": "ui_template",
         "z": "49ef9935a0084879",
+        "d": true,
         "group": "c9285b115cb483f1",
         "name": "Breating-rate",
         "order": 8,
@@ -607,7 +611,7 @@
         "templateScope": "local",
         "className": "",
         "x": 990,
-        "y": 800,
+        "y": 920,
         "wires": [
             []
         ]
@@ -616,6 +620,7 @@
         "id": "fc6d2ce79cdd3596",
         "type": "ui_template",
         "z": "49ef9935a0084879",
+        "d": true,
         "group": "c9285b115cb483f1",
         "name": "Gear-ratio",
         "order": 9,
@@ -628,7 +633,7 @@
         "templateScope": "local",
         "className": "",
         "x": 980,
-        "y": 680,
+        "y": 800,
         "wires": [
             []
         ]
@@ -637,6 +642,7 @@
         "id": "77dfad5181343908",
         "type": "ui_template",
         "z": "49ef9935a0084879",
+        "d": true,
         "group": "",
         "name": "gauge-header",
         "order": 0,
