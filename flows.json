@@ -8,6 +8,14 @@
         "env": []
     },
     {
+        "id": "ddbfc14646ad5a06",
+        "type": "tab",
+        "label": "Cyclist 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "03e7604004065379",
         "type": "ui_base",
         "theme": {
@@ -136,7 +144,7 @@
     {
         "id": "09ab234bed2ce55f",
         "type": "ui_tab",
-        "name": "Cyclist Dashboard",
+        "name": "Map",
         "icon": "dashboard",
         "order": 3,
         "disabled": false,
@@ -145,8 +153,27 @@
     {
         "id": "c9285b115cb483f1",
         "type": "ui_group",
+        "name": "Cyclist 1 Vitals",
+        "tab": "09e14cb17101e31e",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "09e14cb17101e31e",
+        "type": "ui_tab",
         "name": "Vitals",
-        "tab": "09ab234bed2ce55f",
+        "icon": "<i class=\"fa fa-heartbeat\" aria-hidden=\"true\"></i>",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "d92851a096c1256e",
+        "type": "ui_group",
+        "name": "Cyclist 2 Vitals",
+        "tab": "09e14cb17101e31e",
         "order": 1,
         "disp": true,
         "width": 6,
@@ -157,7 +184,7 @@
         "id": "a6ca0cec875f7971",
         "type": "debug",
         "z": "49ef9935a0084879",
-        "name": "debug-sensors-data",
+        "name": "debug-sensors-data-c1",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -166,44 +193,15 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 780,
+        "x": 790,
         "y": 100,
-        "wires": []
-    },
-    {
-        "id": "22a064db95cca791",
-        "type": "ui_gauge",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "name": "Heart Rate (bpm)",
-        "group": "c9285b115cb483f1",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Heart-rate",
-        "label": "bpm",
-        "format": "{{value}}",
-        "min": "50",
-        "max": "200",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "100",
-        "seg2": "130",
-        "diff": false,
-        "className": "",
-        "x": 1010,
-        "y": 200,
         "wires": []
     },
     {
         "id": "7201a1e144ba78fd",
         "type": "inject",
         "z": "49ef9935a0084879",
-        "name": "timestamp-sensors",
+        "name": "timestamp-sensors-c1",
         "props": [
             {
                 "p": "payload"
@@ -215,12 +213,12 @@
         ],
         "repeat": "1",
         "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
+        "once": false,
+        "onceDelay": "1",
         "topic": "",
         "payload": "object",
         "payloadType": "date",
-        "x": 240,
+        "x": 250,
         "y": 260,
         "wires": [
             [
@@ -232,15 +230,15 @@
         "id": "0c4ff3594b832fb1",
         "type": "function",
         "z": "49ef9935a0084879",
-        "name": "generate-sensors-data",
-        "func": "// --- Persistent cyclist state ---\nlet state = flow.get('cyclistState') || {\n    latitude: 44.4000,\n    longitude: 8.9300,\n    speed: 20.0,        // km/h\n    cadence: 80.0,      // rpm\n    gearRatio: 3.0,\n    heartRate: 100.0,\n    breathingRate: 16.0,\n    stressLevel: 0.4\n};\n\n// --- Helper to apply smooth variation ---\nfunction smoothChange(value, target, maxDelta) {\n    let delta = target - value;\n    delta = Math.max(-maxDelta, Math.min(maxDelta, delta));\n    return value + delta;\n}\n\n// --- Set new targets with small random walk ---\nstate._targetSpeed = state._targetSpeed || state.speed;\nstate._targetGearRatio = state._targetGearRatio || state.gearRatio;\n\nstate._targetSpeed += (Math.random() - 0.5) * 0.5;\nstate._targetSpeed = Math.max(10, Math.min(40, state._targetSpeed));\n\n// --- Bias gear ratio toward higher at higher speeds ---\nlet desiredGear = 2 + ((state.speed - 10) / 30) * (4 - 2);\ndesiredGear = Math.max(2, Math.min(4, desiredGear));\nstate._targetGearRatio = smoothChange(state._targetGearRatio, desiredGear, 0.05);\n\n// Add small natural variation\nstate._targetGearRatio += (Math.random() - 0.5) * 0.01;\nstate._targetGearRatio = Math.max(2, Math.min(4, state._targetGearRatio));\n\n// --- Smooth update ---\nstate.speed = smoothChange(state.speed, state._targetSpeed, 0.1);\nstate.gearRatio = smoothChange(state.gearRatio, state._targetGearRatio, 0.02);\n\n// cadence based on speed + gear\nlet speed_m_min = (state.speed * 1000) / 60;\nlet targetCadence = speed_m_min / (state.gearRatio * 2.1);\ntargetCadence = Math.max(60, Math.min(110, targetCadence));\nstate.cadence = smoothChange(state.cadence, targetCadence, 1);\nstate.cadence = Math.max(60, Math.min(110, state.cadence)); // ensure limit after smooth\n\n// heart rate: scaled effort\nlet effort = 0.5 * (state.speed / 40) + 0.5 * (state.cadence / 110);\neffort = Math.min(1, effort);\nlet targetHR = 60 + effort * 80;\ntargetHR = Math.min(180, targetHR);\nstate.heartRate = smoothChange(state.heartRate, targetHR, 1);\nstate.heartRate = Math.min(180, Math.max(60, state.heartRate));\n\n// breathing rate\nlet targetBR = 12 + effort * 8;\nstate.breathingRate = smoothChange(state.breathingRate, targetBR, 0.2);\nstate.breathingRate = Math.max(12, Math.min(20, state.breathingRate));\n\n// stress level\nlet targetStress = effort;\nstate.stressLevel = smoothChange(state.stressLevel, targetStress, 0.01);\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\nstate.stressLevel = Math.min(1, Math.max(0, state.stressLevel));\n\n// position (tiny movement)\nlet deltaLat = (Math.random() - 0.5) * 0.00002; \nlet deltaLon = (Math.random() - 0.5) * 0.00002;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save ---\nflow.set('cyclistState', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: +(state.speed.toFixed(1)),\n    cadence: Math.round(state.cadence),\n    gearRatio: +(state.gearRatio.toFixed(2)),\n    heartRate: Math.round(state.heartRate),\n    breathingRate: +(state.breathingRate.toFixed(1)),\n    stressLevel: state.stressLevel\n};\n\nreturn msg;\n",
+        "name": "generate-sensors-data-c1",
+        "func": "// --- Persistent cyclist state ---\nlet state = flow.get('Cyclist1.state') || {\n    latitude: 44.4000,\n    longitude: 8.9300,\n    speed: 20.0,        // km/h\n    cadence: 80.0,      // rpm\n    gearRatio: 3.0,\n    heartRate: 100.0,\n    breathingRate: 16.0,\n    stressLevel: 0.4\n};\n\n// --- Helper to apply smooth variation ---\nfunction smoothChange(value, target, maxDelta) {\n    let delta = target - value;\n    delta = Math.max(-maxDelta, Math.min(maxDelta, delta));\n    return value + delta;\n}\n\n// --- Set new targets with small random walk ---\nstate._targetSpeed = state._targetSpeed || state.speed;\nstate._targetGearRatio = state._targetGearRatio || state.gearRatio;\n\nstate._targetSpeed += (Math.random() - 0.5) * 0.5;\nstate._targetSpeed = Math.max(10, Math.min(40, state._targetSpeed));\n\n// --- Bias gear ratio toward higher at higher speeds ---\nlet desiredGear = 2 + ((state.speed - 10) / 30) * (4 - 2);\ndesiredGear = Math.max(2, Math.min(4, desiredGear));\nstate._targetGearRatio = smoothChange(state._targetGearRatio, desiredGear, 0.05);\n\n// Add small natural variation\nstate._targetGearRatio += (Math.random() - 0.5) * 0.01;\nstate._targetGearRatio = Math.max(2, Math.min(4, state._targetGearRatio));\n\n// --- Smooth update ---\nstate.speed = smoothChange(state.speed, state._targetSpeed, 0.1);\nstate.gearRatio = smoothChange(state.gearRatio, state._targetGearRatio, 0.02);\n\n// cadence based on speed + gear\nlet speed_m_min = (state.speed * 1000) / 60;\nlet targetCadence = speed_m_min / (state.gearRatio * 2.1);\ntargetCadence = Math.max(60, Math.min(110, targetCadence));\nstate.cadence = smoothChange(state.cadence, targetCadence, 1);\nstate.cadence = Math.max(60, Math.min(110, state.cadence));\n\n// heart rate: scaled effort\nlet effort = 0.5 * (state.speed / 40) + 0.5 * (state.cadence / 110);\neffort = Math.min(1, effort);\nlet targetHR = 60 + effort * 80;\ntargetHR = Math.min(180, targetHR);\nstate.heartRate = smoothChange(state.heartRate, targetHR, 2);\nstate.heartRate = Math.min(180, Math.max(60, state.heartRate));\n\n// breathing rate\nlet targetBR = 12 + effort * 8;\nstate.breathingRate = smoothChange(state.breathingRate, targetBR, 0.2);\nstate.breathingRate = Math.max(12, Math.min(20, state.breathingRate));\n\n// stress level\nlet targetStress = effort;\nstate.stressLevel = smoothChange(state.stressLevel, targetStress, 0.01);\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\nstate.stressLevel = Math.min(1, Math.max(0, state.stressLevel));\n\n// position (tiny movement)\nlet deltaLat = (Math.random() - 0.5) * 0.00002; \nlet deltaLon = (Math.random() - 0.5) * 0.00002;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save ---\nflow.set('Cyclist1', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: +(state.speed.toFixed(1)),\n    cadence: Math.round(state.cadence),\n    gearRatio: +(state.gearRatio.toFixed(2)),\n    heartRate: Math.round(state.heartRate),\n    breathingRate: +(state.breathingRate.toFixed(1)),\n    stressLevel: state.stressLevel\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
+        "x": 490,
         "y": 260,
         "wires": [
             [
@@ -257,7 +255,7 @@
         "id": "c2e6335da047780e",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "change-heart-rate",
+        "name": "change-heart-rate-c1",
         "rules": [
             {
                 "t": "set",
@@ -272,14 +270,14 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 770,
+        "x": 780,
         "y": 200,
         "wires": [
             [
-                "22a064db95cca791",
                 "b0d330a56d92b095",
                 "1462cc644e7a8637",
-                "e452c6a1dc7e8435"
+                "e452c6a1dc7e8435",
+                "22a064db95cca791"
             ]
         ]
     },
@@ -287,7 +285,7 @@
         "id": "e4b73ed3cf9b77c5",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "change-speed",
+        "name": "change-speed-c1",
         "rules": [
             {
                 "t": "set",
@@ -302,51 +300,20 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 760,
-        "y": 480,
+        "x": 770,
+        "y": 420,
         "wires": [
             [
-                "cd52c396adb8929c",
-                "5b8260e8b0b7df67",
                 "becd17faa209dea7",
                 "59c05579e0c61a16"
             ]
         ]
     },
     {
-        "id": "96fa74bada67238e",
-        "type": "ui_gauge",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "name": "Cadence (rpm)",
-        "group": "c9285b115cb483f1",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Cadence (rpm)",
-        "label": "rpm",
-        "format": "{{value}}",
-        "min": "60",
-        "max": "110",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "75",
-        "seg2": "90",
-        "diff": false,
-        "className": "",
-        "x": 1000,
-        "y": 820,
-        "wires": []
-    },
-    {
         "id": "5b63754e9d5412c9",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "change-cadence",
+        "name": "change-cadence-c1",
         "rules": [
             {
                 "t": "set",
@@ -361,13 +328,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 770,
-        "y": 820,
+        "x": 790,
+        "y": 580,
         "wires": [
             [
-                "96fa74bada67238e",
                 "131e8b9dc0c822c3",
-                "5a6b27a5a350bdfb",
                 "1431018d7055a37e",
                 "46c2a1dc62d97cf4"
             ]
@@ -377,7 +342,7 @@
         "id": "131e8b9dc0c822c3",
         "type": "debug",
         "z": "49ef9935a0084879",
-        "name": "debug-change-cadence",
+        "name": "debug-change-cadence-c1",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -386,15 +351,15 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1030,
-        "y": 880,
+        "x": 1040,
+        "y": 640,
         "wires": []
     },
     {
         "id": "c1e7ebbe5b022198",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "Gear-ratio",
+        "name": "change-gear-ratio-c1",
         "rules": [
             {
                 "t": "set",
@@ -409,80 +374,20 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 740,
-        "y": 1060,
+        "x": 780,
+        "y": 760,
         "wires": [
             [
-                "676796128dc22821",
-                "fc6d2ce79cdd3596",
                 "8fe45d91916ae1a9",
                 "9415b62948f8c120"
             ]
         ]
     },
     {
-        "id": "cd52c396adb8929c",
-        "type": "ui_gauge",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "name": "Speed",
-        "group": "c9285b115cb483f1",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Speed",
-        "label": "units",
-        "format": "{{value}}",
-        "min": 0,
-        "max": "80",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "20",
-        "seg2": "35",
-        "diff": false,
-        "className": "",
-        "x": 970,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "676796128dc22821",
-        "type": "ui_gauge",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "name": "Gear-ratio",
-        "group": "c9285b115cb483f1",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Gear-ratio",
-        "label": "units",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 10,
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "2",
-        "seg2": "4",
-        "diff": false,
-        "className": "",
-        "x": 980,
-        "y": 1060,
-        "wires": []
-    },
-    {
         "id": "52184ced46f6cdd0",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "Breathing-rate",
+        "name": "change-breathing-rate-c1",
         "rules": [
             {
                 "t": "set",
@@ -497,88 +402,13 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 760,
-        "y": 1300,
+        "x": 770,
+        "y": 880,
         "wires": [
             [
-                "e30b3bfaa824227e",
-                "edc0946c36782a00",
                 "7a561cec02a71d51",
                 "aa32617a3f2ee30a"
             ]
-        ]
-    },
-    {
-        "id": "e30b3bfaa824227e",
-        "type": "ui_gauge",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "name": "Breathing-rate",
-        "group": "c9285b115cb483f1",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Breathing-rate",
-        "label": "units",
-        "format": "{{value}}",
-        "min": "12",
-        "max": "50",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "16",
-        "seg2": "18",
-        "diff": false,
-        "className": "",
-        "x": 1000,
-        "y": 1300,
-        "wires": []
-    },
-    {
-        "id": "5a6b27a5a350bdfb",
-        "type": "ui_template",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "group": "c9285b115cb483f1",
-        "name": "Cadence",
-        "order": 5,
-        "width": 0,
-        "height": 0,
-        "format": "<div id=\"cadenceGaugeContainer\"></div>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'cadenceGaugeContainer',\n      labels: ['Slow', 'Optimal', 'Fast', 'Very Fast'],\n      data: [25, 40, 10, 25],\n      colors: ['#FF0000', '#00FF00', '#FFFF00', '#FF0000'],\n      title: 'Cadence (rpm)',\n      pointerColor: 'black',\n      units: ' rpm',\n      min: 0,\n      max: 150\n    };\n\n    const cadenceGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(cadence) {\n      if (typeof cadence === 'number') {\n        cadenceGauge.update(cadence);\n      }\n    });\n  })(scope);\n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 980,
-        "y": 760,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5b8260e8b0b7df67",
-        "type": "ui_template",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "group": "c9285b115cb483f1",
-        "name": "Speed",
-        "order": 6,
-        "width": 0,
-        "height": 0,
-        "format": "<div id=\"speedGaugeContainer\"></div>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'speedGaugeContainer',\n      labels: ['', '', '', ''],\n      data: [10, 15, 15, 20], // segments: 0-10, 10-25, 25-40, 40-50+\n      colors: ['#FF0000', '#FFFF00', '#00FF00', '#FF0000'],\n      title: 'Speed (km/h)',\n      pointerColor: 'black',\n      units: ' km/h',\n      min: 0,\n      max: 50\n    };\n\n    const speedGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(speed) {\n      if (typeof speed === 'number') {\n        speedGauge.update(speed);\n      }\n    });\n  })(scope);\n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 970,
-        "y": 580,
-        "wires": [
-            []
         ]
     },
     {
@@ -587,7 +417,7 @@
         "z": "49ef9935a0084879",
         "d": true,
         "group": "c9285b115cb483f1",
-        "name": "Heart rate",
+        "name": "customized-heart-rate",
         "order": 7,
         "width": 0,
         "height": 0,
@@ -597,52 +427,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 980,
+        "x": 1020,
         "y": 260,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "edc0946c36782a00",
-        "type": "ui_template",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "group": "c9285b115cb483f1",
-        "name": "Breating-rate",
-        "order": 8,
-        "width": 0,
-        "height": 0,
-        "format": "<div id=\"breathingRateGaugeContainer\"></div>\n\n<script>\n    (function(scope) {\n    const config = {\n      containerId: 'breathingRateGaugeContainer',\n      labels: ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Maximum'],\n      data: [20, 30, 40, 50],\n      colors: ['#00FF00', '#FFFF00', '#FFA500', '#FF0000'], // green, yellow, orange, red\n      title: 'Breathing Rate (bpm)',\n      pointerColor: 'black',\n      units: ' bpm',\n      min: 0,\n      max: 60\n    };\n\n    const breathingRateGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(breathingRate) {\n      if (typeof breathingRate === 'number') {\n        breathingRateGauge.update(breathingRate);\n      }\n    });\n  })(scope);\n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 990,
-        "y": 1360,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fc6d2ce79cdd3596",
-        "type": "ui_template",
-        "z": "49ef9935a0084879",
-        "d": true,
-        "group": "c9285b115cb483f1",
-        "name": "Gear-ratio",
-        "order": 9,
-        "width": 0,
-        "height": 0,
-        "format": "<div id=\"gearRatioGaugeContainer\"></div>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'gearRatioGaugeContainer',\n      labels: ['Low', 'Moderate', 'High'],\n      data: [2.0, 3.0],\n      colors: ['#00FF00', '#FFFF00', '#FF0000'], // green: low, yellow: moderate, red: high\n      title: 'Gear Ratio',\n      pointerColor: 'black',\n      units: '',\n      min: 1.0,\n      max: 5.0\n    };\n\n    const gearRatioGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(gearRatio) {\n      if (typeof gearRatio === 'number') {\n        gearRatioGauge.update(gearRatio);\n      }\n    });\n  })(scope);\n</script>\n",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 980,
-        "y": 1120,
         "wires": [
             []
         ]
@@ -673,12 +459,12 @@
         "id": "1462cc644e7a8637",
         "type": "ui_chart",
         "z": "49ef9935a0084879",
-        "name": "Hear-rate chart",
+        "name": "chart-heart-rate-c1",
         "group": "c9285b115cb483f1",
         "order": 11,
         "width": 0,
         "height": 0,
-        "label": "Hear-rate chart",
+        "label": "Hear-rate",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -707,7 +493,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 1000,
+        "x": 1010,
         "y": 140,
         "wires": [
             []
@@ -721,7 +507,7 @@
         "order": 11,
         "width": 0,
         "height": 0,
-        "name": "Heart-rate",
+        "name": "gauge-heart-rate-c1",
         "icon": "",
         "label": "Heart-rate",
         "unit": "bpm",
@@ -778,7 +564,7 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 980,
+        "x": 1020,
         "y": 320,
         "wires": []
     },
@@ -790,7 +576,7 @@
         "order": 12,
         "width": 0,
         "height": 0,
-        "name": "Speed",
+        "name": "gauge-speed-c1",
         "icon": "",
         "label": "Speed",
         "unit": "km/h",
@@ -847,15 +633,15 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 970,
-        "y": 460,
+        "x": 1000,
+        "y": 440,
         "wires": []
     },
     {
         "id": "59c05579e0c61a16",
         "type": "ui_chart",
         "z": "49ef9935a0084879",
-        "name": "Speed",
+        "name": "chart-speed-c1",
         "group": "c9285b115cb483f1",
         "order": 13,
         "width": 0,
@@ -889,8 +675,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 970,
-        "y": 400,
+        "x": 1000,
+        "y": 380,
         "wires": [
             []
         ]
@@ -899,7 +685,7 @@
         "id": "1431018d7055a37e",
         "type": "ui_chart",
         "z": "49ef9935a0084879",
-        "name": "Cadence",
+        "name": "chart-cadence-c1",
         "group": "c9285b115cb483f1",
         "order": 14,
         "width": 0,
@@ -933,8 +719,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 980,
-        "y": 640,
+        "x": 1010,
+        "y": 520,
         "wires": [
             []
         ]
@@ -947,7 +733,7 @@
         "order": 15,
         "width": 0,
         "height": 0,
-        "name": "Cadence",
+        "name": "gauge-cadence-c1",
         "icon": "",
         "label": "Cadence",
         "unit": "rpm",
@@ -1004,8 +790,8 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 980,
-        "y": 700,
+        "x": 1010,
+        "y": 580,
         "wires": []
     },
     {
@@ -1016,7 +802,7 @@
         "order": 16,
         "width": 0,
         "height": 0,
-        "name": "Gear-ratio",
+        "name": "gauge-gear-ratio-c1",
         "icon": "",
         "label": "Gear-ratio",
         "unit": "",
@@ -1073,8 +859,8 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 980,
-        "y": 940,
+        "x": 1010,
+        "y": 740,
         "wires": []
     },
     {
@@ -1085,7 +871,7 @@
         "order": 19,
         "width": 0,
         "height": 0,
-        "name": "Breath-rate",
+        "name": "gauge-breath-rate-c1",
         "icon": "",
         "label": "Breath-rate",
         "unit": "",
@@ -1142,15 +928,15 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 990,
-        "y": 1240,
+        "x": 1020,
+        "y": 920,
         "wires": []
     },
     {
         "id": "9415b62948f8c120",
         "type": "ui_chart",
         "z": "49ef9935a0084879",
-        "name": "Gear-ratio",
+        "name": "chart-gear-ratio-c1",
         "group": "c9285b115cb483f1",
         "order": 17,
         "width": 0,
@@ -1184,8 +970,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 980,
-        "y": 1000,
+        "x": 1010,
+        "y": 800,
         "wires": [
             []
         ]
@@ -1194,7 +980,7 @@
         "id": "aa32617a3f2ee30a",
         "type": "ui_chart",
         "z": "49ef9935a0084879",
-        "name": "Breath-rate",
+        "name": "chart-breath-rate-c1",
         "group": "c9285b115cb483f1",
         "order": 18,
         "width": 0,
@@ -1228,10 +1014,869 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 990,
-        "y": 1180,
+        "x": 1020,
+        "y": 860,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "22a064db95cca791",
+        "type": "ui_gauge",
+        "z": "49ef9935a0084879",
+        "d": true,
+        "name": "classic-gauge-heart-rate",
+        "group": "c9285b115cb483f1",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Heart-rate",
+        "label": "bpm",
+        "format": "{{value}}",
+        "min": "50",
+        "max": "200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "100",
+        "seg2": "130",
+        "diff": false,
+        "className": "",
+        "x": 1030,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "fae7ec1bee79ab61",
+        "type": "debug",
+        "z": "ddbfc14646ad5a06",
+        "name": "debug-sensors-data-c2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c4e55635d911647e",
+        "type": "function",
+        "z": "ddbfc14646ad5a06",
+        "d": true,
+        "name": "generate-sensors-data-c2",
+        "func": "// --- Persistent cyclist state ---\nlet state = flow.get('Cyclist2.state') || {\n    latitude: 34.2000,\n    longitude: 2.9200,\n    speed: 12.0,        // km/h\n    cadence: 50.0,      // rpm\n    gearRatio: 2.0,\n    heartRate: 90.0,\n    breathingRate: 12.0,\n    stressLevel: 0.2\n};\n\n// --- Helper to apply smooth variation ---\nfunction smoothChange2(value, target, maxDelta) {\n    let delta = target - value;\n    delta = Math.max(-maxDelta, Math.min(maxDelta, delta));\n    return value + delta;\n}\n\n// --- Set new targets with small random walk ---\nstate._targetSpeed = state._targetSpeed || state.speed;\nstate._targetGearRatio = state._targetGearRatio || state.gearRatio;\n\nstate._targetSpeed += (Math.random() - 0.5) * 0.5;\nstate._targetSpeed = Math.max(10, Math.min(40, state._targetSpeed));\n\n// --- Bias gear ratio toward higher at higher speeds ---\nlet desiredGear = 2 + ((state.speed - 10) / 30) * (4 - 2);\ndesiredGear = Math.max(2, Math.min(4, desiredGear));\nstate._targetGearRatio = smoothChange2(state._targetGearRatio, desiredGear, 0.05);\n\n// Add small natural variation\nstate._targetGearRatio += (Math.random() - 0.5) * 0.01;\nstate._targetGearRatio = Math.max(2, Math.min(4, state._targetGearRatio));\n\n// --- Smooth update ---\nstate.speed = smoothChange2(state.speed, state._targetSpeed, 0.1);\nstate.gearRatio = smoothChange2(state.gearRatio, state._targetGearRatio, 0.02);\n\n// cadence based on speed + gear\nlet speed_m_min = (state.speed * 1000) / 60;\nlet targetCadence = speed_m_min / (state.gearRatio * 2.1);\ntargetCadence = Math.max(60, Math.min(110, targetCadence));\nstate.cadence = smoothChange2(state.cadence, targetCadence, 1);\nstate.cadence = Math.max(60, Math.min(110, state.cadence)); // ensure limit after smooth\n\n// heart rate: scaled effort\nlet effort = 0.5 * (state.speed / 40) + 0.5 * (state.cadence / 110);\neffort = Math.min(1, effort);\nlet targetHR = 60 + effort * 80;\ntargetHR = Math.min(180, targetHR);\nstate.heartRate = smoothChange2(state.heartRate, targetHR, 1);\nstate.heartRate = Math.min(180, Math.max(60, state.heartRate));\n\n// breathing rate\nlet targetBR = 12 + effort * 8;\nstate.breathingRate = smoothChange2(state.breathingRate, targetBR, 0.2);\nstate.breathingRate = Math.max(12, Math.min(20, state.breathingRate));\n\n// stress level\nlet targetStress = effort;\nstate.stressLevel = smoothChange2(state.stressLevel, targetStress, 0.01);\nstate.stressLevel = Math.round(state.stressLevel * 100) / 100;\nstate.stressLevel = Math.min(1, Math.max(0, state.stressLevel));\n\n// position (tiny movement)\nlet deltaLat = (Math.random() - 0.5) * 0.00002; \nlet deltaLon = (Math.random() - 0.5) * 0.00002;\nstate.latitude += deltaLat;\nstate.longitude += deltaLon;\n\n// --- Save ---\nflow.set('Cyclist2', state);\n\n// --- Output ---\nmsg.payload = {\n    gps: {\n        latitude: state.latitude.toFixed(6),\n        longitude: state.longitude.toFixed(6)\n    },\n    speed: +(state.speed.toFixed(1)),\n    cadence: Math.round(state.cadence),\n    gearRatio: +(state.gearRatio.toFixed(2)),\n    heartRate: Math.round(state.heartRate),\n    breathingRate: +(state.breathingRate.toFixed(1)),\n    stressLevel: state.stressLevel\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 220,
+        "wires": [
+            [
+                "fae7ec1bee79ab61",
+                "495d689b3969535a",
+                "860853d82f4d3f08",
+                "444849ed44d02f40",
+                "6380043ff06a7a99",
+                "622b72df693d5b84"
+            ]
+        ]
+    },
+    {
+        "id": "495d689b3969535a",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-heart-rate-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.heartRate",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 700,
+        "y": 160,
+        "wires": [
+            [
+                "581a7c0e9eed8000",
+                "24eb7f263c2fdbe3"
+            ]
+        ]
+    },
+    {
+        "id": "860853d82f4d3f08",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-speed-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.speed",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 690,
+        "y": 240,
+        "wires": [
+            [
+                "f078aefdc15f6391",
+                "88c56fc920856687"
+            ]
+        ]
+    },
+    {
+        "id": "444849ed44d02f40",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-cadence-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.cadence",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 360,
+        "wires": [
+            [
+                "3531e2329fa09cc1",
+                "18eaeaf3b1ff88b6",
+                "6477259138905654"
+            ]
+        ]
+    },
+    {
+        "id": "3531e2329fa09cc1",
+        "type": "debug",
+        "z": "ddbfc14646ad5a06",
+        "name": "debug-change-cadence-c2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "6380043ff06a7a99",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-gear-ratio-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.gearRatio",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 680,
+        "y": 540,
+        "wires": [
+            [
+                "f965863bec9147c7",
+                "3a5b50fd0d0edfc6"
+            ]
+        ]
+    },
+    {
+        "id": "622b72df693d5b84",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-breathing-rate-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.breathingRate",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 690,
+        "y": 660,
+        "wires": [
+            [
+                "fcd141fc912448ed",
+                "4ed419a76dc8d970"
+            ]
+        ]
+    },
+    {
+        "id": "581a7c0e9eed8000",
+        "type": "ui_chart",
+        "z": "ddbfc14646ad5a06",
+        "name": "chart-heart-rate-c2",
+        "group": "d92851a096c1256e",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "label": "Hear-rate chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "200",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#f66151",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 930,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "24eb7f263c2fdbe3",
+        "type": "ui_artlessgauge2",
+        "z": "ddbfc14646ad5a06",
+        "group": "d92851a096c1256e",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-heart-rate-c2",
+        "icon": "",
+        "label": "Heart-rate",
+        "unit": "bpm",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 110,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 160,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 940,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "f078aefdc15f6391",
+        "type": "ui_artlessgauge2",
+        "z": "ddbfc14646ad5a06",
+        "group": "d92851a096c1256e",
+        "order": 12,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-speed-c2",
+        "icon": "",
+        "label": "Speed",
+        "unit": "km/h",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 8,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 30,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 70,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 920,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "88c56fc920856687",
+        "type": "ui_chart",
+        "z": "ddbfc14646ad5a06",
+        "name": "chart-speed-c2",
+        "group": "d92851a096c1256e",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "label": "Speed",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "70",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 920,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "18eaeaf3b1ff88b6",
+        "type": "ui_chart",
+        "z": "ddbfc14646ad5a06",
+        "name": "chart-cadence-c2",
+        "group": "d92851a096c1256e",
+        "order": 14,
+        "width": 0,
+        "height": 0,
+        "label": "Cadence",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "200",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#62a0ea",
+            "#aec7e8",
+            "#ffbe6f",
+            "#57e389",
+            "#98df8a",
+            "#f66151",
+            "#ff9896",
+            "#9467bd",
+            "#dc8add"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 930,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6477259138905654",
+        "type": "ui_artlessgauge2",
+        "z": "ddbfc14646ad5a06",
+        "group": "d92851a096c1256e",
+        "order": 15,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-cadence-c2",
+        "icon": "",
+        "label": "Cadence",
+        "unit": "rpm",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 100,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 930,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "f965863bec9147c7",
+        "type": "ui_artlessgauge2",
+        "z": "ddbfc14646ad5a06",
+        "group": "d92851a096c1256e",
+        "order": 16,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-gear-ratio-c2",
+        "icon": "",
+        "label": "Gear-ratio",
+        "unit": "",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 1,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 2,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 3,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 4,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 6,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 930,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "fcd141fc912448ed",
+        "type": "ui_artlessgauge2",
+        "z": "ddbfc14646ad5a06",
+        "group": "d92851a096c1256e",
+        "order": 19,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-breath-rate-c2",
+        "icon": "",
+        "label": "Breath-rate",
+        "unit": "",
+        "layout": "radial",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 940,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "3a5b50fd0d0edfc6",
+        "type": "ui_chart",
+        "z": "ddbfc14646ad5a06",
+        "name": "chart-gear-ratio-c2",
+        "group": "d92851a096c1256e",
+        "order": 17,
+        "width": 0,
+        "height": 0,
+        "label": "Gear-ratio",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "6",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 930,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4ed419a76dc8d970",
+        "type": "ui_chart",
+        "z": "ddbfc14646ad5a06",
+        "name": "chart-breath-rate-c2",
+        "group": "d92851a096c1256e",
+        "order": 18,
+        "width": 0,
+        "height": 0,
+        "label": "Breath-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "80",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 940,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "709d13b041d8c383",
+        "type": "inject",
+        "z": "ddbfc14646ad5a06",
+        "name": "timestamp-sensors-c2",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1.5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "object",
+        "payloadType": "date",
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "c4e55635d911647e",
+                "8b337ecd59b14cbf"
+            ]
+        ]
+    },
+    {
+        "id": "8b337ecd59b14cbf",
+        "type": "function",
+        "z": "ddbfc14646ad5a06",
+        "name": "function-dataset-c1",
+        "func": "\n// Load dataset if not cached\nlet data = flow.get('bikingData');\nif (!data) {\n    try {\n        const filePath = path.join('/home/sahar/.node-red/public', 'biking-dataset.json');\n        const raw = fs.readFileSync(filePath, 'utf8');\n        data = JSON.parse(raw);\n        flow.set('bikingData', data);\n        flow.set('bikingIndex', 0);\n        flow.set('bikingDirection', 1); // 1 = forward, -1 = backward\n    } catch (err) {\n        node.error(\"Failed to load dataset: \" + err.message);\n        return null;\n    }\n}\n\n// Get state\nlet index = flow.get('bikingIndex') || 0;\nlet direction = flow.get('bikingDirection') || 1;\n\n// Output current point\nmsg.payload = data[index];\n\n// Update index\nindex += direction;\n\n// Check boundaries and reverse if needed\nif (index >= data.length) {\n    index = data.length - 2;\n    direction = -1;\n} else if (index < 0) {\n    index = 1;\n    direction = 1;\n}\n\n// Save state\nflow.set('bikingIndex', index);\nflow.set('bikingDirection', direction);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            },
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 390,
+        "y": 340,
+        "wires": [
+            [
+                "fae7ec1bee79ab61",
+                "495d689b3969535a",
+                "860853d82f4d3f08",
+                "444849ed44d02f40",
+                "6380043ff06a7a99",
+                "622b72df693d5b84"
+            ]
         ]
     }
 ]
