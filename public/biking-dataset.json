@@ -1,0 +1,155 @@
+[
+  {
+    "gps": { "latitude": 45.000000, "longitude": 7.000000 },
+    "speed": 0.0,
+    "cadence": 0,
+    "gearRatio": 2.0,
+    "heartRate": 90,
+    "breathingRate": 15,
+    "stressLevel": 5
+  },
+  {
+    "gps": { "latitude": 45.000946, "longitude": 7.001338 },
+    "speed": 9.0,
+    "cadence": 38,
+    "gearRatio": 2.25,
+    "heartRate": 105,
+    "breathingRate": 18,
+    "stressLevel": 8
+  },
+  {
+    "gps": { "latitude": 45.002838, "longitude": 7.004013 },
+    "speed": 18.0,
+    "cadence": 75,
+    "gearRatio": 2.5,
+    "heartRate": 120,
+    "breathingRate": 20,
+    "stressLevel": 10
+  },
+  {
+    "gps": { "latitude": 45.004870, "longitude": 7.006887 },
+    "speed": 19.3,
+    "cadence": 78,
+    "gearRatio": 2.67,
+    "heartRate": 125,
+    "breathingRate": 22,
+    "stressLevel": 12
+  },
+  {
+    "gps": { "latitude": 45.007042, "longitude": 7.009959 },
+    "speed": 20.7,
+    "cadence": 82,
+    "gearRatio": 2.83,
+    "heartRate": 130,
+    "breathingRate": 23,
+    "stressLevel": 15
+  },
+  {
+    "gps": { "latitude": 45.009354, "longitude": 7.013230 },
+    "speed": 22.0,
+    "cadence": 85,
+    "gearRatio": 3.0,
+    "heartRate": 135,
+    "breathingRate": 25,
+    "stressLevel": 18
+  },
+  {
+    "gps": { "latitude": 45.011421, "longitude": 7.016154 },
+    "speed": 19.7,
+    "cadence": 80,
+    "gearRatio": 2.6,
+    "heartRate": 140,
+    "breathingRate": 30,
+    "stressLevel": 37
+  },
+  {
+    "gps": { "latitude": 45.013243, "longitude": 7.018731 },
+    "speed": 17.3,
+    "cadence": 75,
+    "gearRatio": 2.2,
+    "heartRate": 150,
+    "breathingRate": 35,
+    "stressLevel": 58
+  },
+  {
+    "gps": { "latitude": 45.014820, "longitude": 7.020961 },
+    "speed": 15.0,
+    "cadence": 70,
+    "gearRatio": 1.8,
+    "heartRate": 160,
+    "breathingRate": 40,
+    "stressLevel": 80
+  },
+  {
+    "gps": { "latitude": 45.012543, "longitude": 7.022341 },
+    "speed": 21.7,
+    "cadence": 67,
+    "gearRatio": 2.53,
+    "heartRate": 153,
+    "breathingRate": 37,
+    "stressLevel": 70
+  },
+  {
+    "gps": { "latitude": 45.009565, "longitude": 7.024147 },
+    "speed": 28.3,
+    "cadence": 63,
+    "gearRatio": 3.27,
+    "heartRate": 147,
+    "breathingRate": 33,
+    "stressLevel": 60
+  },
+  {
+    "gps": { "latitude": 45.005886, "longitude": 7.026377 },
+    "speed": 35.0,
+    "cadence": 60,
+    "gearRatio": 4.0,
+    "heartRate": 140,
+    "breathingRate": 30,
+    "stressLevel": 50
+  },
+  {
+    "gps": { "latitude": 45.002995, "longitude": 7.028129 },
+    "speed": 27.5,
+    "cadence": 58,
+    "gearRatio": 3.5,
+    "heartRate": 130,
+    "breathingRate": 27,
+    "stressLevel": 40
+  },
+  {
+    "gps": { "latitude": 45.000893, "longitude": 7.029403 },
+    "speed": 20.0,
+    "cadence": 55,
+    "gearRatio": 3.0,
+    "heartRate": 120,
+    "breathingRate": 24,
+    "stressLevel": 30
+  },
+  {
+    "gps": { "latitude": 44.999580, "longitude": 7.030199 },
+    "speed": 12.5,
+    "cadence": 52,
+    "gearRatio": 2.5,
+    "heartRate": 110,
+    "breathingRate": 21,
+    "stressLevel": 20
+  },
+  {
+    "gps": { "latitude": 44.999054, "longitude": 7.030518 },
+    "speed": 5.0,
+    "cadence": 50,
+    "gearRatio": 2.0,
+    "heartRate": 100,
+    "breathingRate": 18,
+    "stressLevel": 10
+  },
+  {
+    "gps": { "latitude": 44.998111, "longitude": 7.030618 },
+    "speed": 2.0,
+    "cadence": 48,
+    "gearRatio": 1.0,
+    "heartRate": 90,
+    "breathingRate": 16,
+    "stressLevel": 9
+  }
+]
