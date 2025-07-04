@@ -23,4 +23,4 @@ module.exports = {
 
 3. Wokwi heart-rate generator: https://wokwi.com/projects/435578598139787265
 
-4. MQTT Explorer is used to test the correctness of our mqtt code and is placed in public directory.
+4. MQTT Explorer is used to test the correctness of our mqtt code.
