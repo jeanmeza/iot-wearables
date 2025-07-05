@@ -151,17 +151,6 @@
         "hidden": false
     },
     {
-        "id": "c9285b115cb483f1",
-        "type": "ui_group",
-        "name": "Cyclist 1 Vitals",
-        "tab": "09e14cb17101e31e",
-        "order": 1,
-        "disp": true,
-        "width": 6,
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "09e14cb17101e31e",
         "type": "ui_tab",
         "name": "Vitals",
@@ -183,7 +172,7 @@
     {
         "id": "bc626649c953509f",
         "type": "mqtt-broker",
-        "name": "test.mosquitto.org",
+        "name": "mqtt-heart-rate",
         "broker": "test.mosquitto.org",
         "port": 1883,
         "clientid": "",
@@ -210,6 +199,17 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
+    },
+    {
+        "id": "c9285b115cb483f1",
+        "type": "ui_group",
+        "name": "Cyclist 1 Vitals",
+        "tab": "09e14cb17101e31e",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
     },
     {
         "id": "a6ca0cec875f7971",
@@ -1086,8 +1086,8 @@
         "id": "4d65577a5151ce73",
         "type": "mqtt in",
         "z": "49ef9935a0084879",
-        "name": "mqtt-heartbeat-rate",
-        "topic": "sensor/health",
+        "name": "mqtt-heart-rate",
+        "topic": "sensor/heart-rate",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "bc626649c953509f",
@@ -1095,7 +1095,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 470,
+        "x": 460,
         "y": 180,
         "wires": [
             [
