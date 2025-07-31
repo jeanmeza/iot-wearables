@@ -10,7 +10,7 @@ iot-wearables
 
 ```bash
 module.exports = {
-  httpStatic: '/home/<your username>/.node-red/public/',
+  httpStatic: '/home/<your username>/.node-red/projects/iot-wearables/public',
   editorTheme: {
     projects: {
       enabled: true,
