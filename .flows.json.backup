@@ -1751,7 +1751,7 @@
         "type": "debug",
         "z": "ddbfc14646ad5a06",
         "name": "debug-heart-rate",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
