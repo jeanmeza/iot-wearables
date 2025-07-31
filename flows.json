@@ -212,6 +212,18 @@
         "className": ""
     },
     {
+        "id": "f3230bcd2993c42b",
+        "type": "global-config",
+        "name": "global-config",
+        "env": [
+            {
+                "name": "home",
+                "value": "/home/sahar",
+                "type": "str"
+            }
+        ]
+    },
+    {
         "id": "a6ca0cec875f7971",
         "type": "debug",
         "z": "49ef9935a0084879",
@@ -1705,7 +1717,7 @@
         "type": "function",
         "z": "ddbfc14646ad5a06",
         "name": "function-dataset-c2",
-        "func": "\n// Load dataset if not cached\nlet data = flow.get('bikingData');\nif (!data) {\n    try {\n        const filePath = path.join('/home/sahar/.node-red/public', 'biking-dataset.json');\n        const raw = fs.readFileSync(filePath, 'utf8');\n        data = JSON.parse(raw);\n        flow.set('bikingData', data);\n        flow.set('bikingIndex', 0);\n        flow.set('bikingDirection', 1); // 1 = forward, -1 = backward\n    } catch (err) {\n        node.error(\"Failed to load dataset: \" + err.message);\n        return null;\n    }\n}\n\n// Get state\nlet index = flow.get('bikingIndex') || 0;\nlet direction = flow.get('bikingDirection') || 1;\n\n// Output current point\nmsg.payload = data[index];\n\n// Update index\nindex += direction;\n\n// Check boundaries and reverse if needed\nif (index >= data.length) {\n    index = data.length - 2;\n    direction = -1;\n} else if (index < 0) {\n    index = 1;\n    direction = 1;\n}\n\n// Save state\nflow.set('bikingIndex', index);\nflow.set('bikingDirection', direction);\n\nreturn msg;",
+        "func": "// Load dataset if not cached\nlet data = flow.get('bikingData');\nif (!data) {\n    try {\n        const dir = env.get(\"home\")\n        const filePath = path.join(dir + '/.node-red/projects/iot-wearables/public', 'biking-dataset.json');\n        const raw = fs.readFileSync(filePath, 'utf8');\n        data = JSON.parse(raw);\n        flow.set('bikingData', data);\n        flow.set('bikingIndex', 0);\n        flow.set('bikingDirection', 1); // 1 = forward, -1 = backward\n    } catch (err) {\n        node.error(\"Failed to load dataset: \" + err.message);\n        return null;\n    }\n}\n\n// Get state\nlet index = flow.get('bikingIndex') || 0;\nlet direction = flow.get('bikingDirection') || 1;\n\n// Output current point\nmsg.payload = data[index];\n\n// Update index\nindex += direction;\n\n// Check boundaries and reverse if needed\nif (index >= data.length) {\n    index = data.length - 2;\n    direction = -1;\n} else if (index < 0) {\n    index = 1;\n    direction = 1;\n}\n\n// Save state\nflow.set('bikingIndex', index);\nflow.set('bikingDirection', direction);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1739,7 +1751,7 @@
         "type": "debug",
         "z": "ddbfc14646ad5a06",
         "name": "debug-heart-rate",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
