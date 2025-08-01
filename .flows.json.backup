@@ -162,7 +162,7 @@
         "id": "09e14cb17101e31e",
         "type": "ui_tab",
         "name": "Vitals",
-        "icon": "<i class=\"fa fa-heartbeat\" aria-hidden=\"true\"></i>",
+        "icon": "fa-heartbeat",
         "disabled": false,
         "hidden": false
     },
@@ -222,7 +222,6 @@
     {
         "id": "f3230bcd2993c42b",
         "type": "global-config",
-        "name": "global-config",
         "env": [
             {
                 "name": "home",
@@ -235,7 +234,7 @@
         "id": "feaeb291767880fa",
         "type": "ui_tab",
         "name": "Team",
-        "icon": "fa-heartbeat",
+        "icon": "fa-users",
         "disabled": false,
         "hidden": false
     },
