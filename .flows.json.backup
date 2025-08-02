@@ -24,6 +24,14 @@
         "env": []
     },
     {
+        "id": "dbf6846c835accaf",
+        "type": "tab",
+        "label": "Cyclist 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "03e7604004065379",
         "type": "ui_base",
         "theme": {
@@ -162,7 +170,7 @@
         "id": "09e14cb17101e31e",
         "type": "ui_tab",
         "name": "Vitals",
-        "icon": "<i class=\"fa fa-heartbeat\" aria-hidden=\"true\"></i>",
+        "icon": "fa-heartbeat",
         "disabled": false,
         "hidden": false
     },
@@ -235,7 +243,7 @@
         "id": "feaeb291767880fa",
         "type": "ui_tab",
         "name": "Team",
-        "icon": "fa-heartbeat",
+        "icon": "fa-users",
         "disabled": false,
         "hidden": false
     },
@@ -245,6 +253,17 @@
         "name": "Team",
         "tab": "feaeb291767880fa",
         "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fb5836fdc77fe91d",
+        "type": "ui_group",
+        "name": "Cyclist 3 Vitals",
+        "tab": "09e14cb17101e31e",
+        "order": 3,
         "disp": true,
         "width": 6,
         "collapse": false,
@@ -1141,22 +1160,6 @@
                 "c2e6335da047780e",
                 "a6ca0cec875f7971"
             ]
-        ]
-    },
-    {
-        "id": "a401dc2d76dac31a",
-        "type": "mqtt in JSON",
-        "z": "49ef9935a0084879",
-        "name": "mqtt-heartbeat-rate-json",
-        "topic": "sensor/health",
-        "qos": "2",
-        "broker": "bc626649c953509f",
-        "ignoreempty": true,
-        "removemqttconfig": false,
-        "x": 480,
-        "y": 120,
-        "wires": [
-            []
         ]
     },
     {
@@ -2093,8 +2096,137 @@
         "mapurl": "",
         "mapopt": "",
         "mapwms": false,
-        "x": 430,
+        "x": 590,
         "y": 160,
         "wires": []
+    },
+    {
+        "id": "3008db5d97d439b3",
+        "type": "mqtt in",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-heart-rate-c3",
+        "topic": "sensors/howdy/heartRate",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 180,
+        "wires": [
+            [
+                "09facc7e96912cb7",
+                "c8e2e5dd198c5359",
+                "56e3f62f5b16638f"
+            ]
+        ]
+    },
+    {
+        "id": "09facc7e96912cb7",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "debug-heart-rate-c3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "c8e2e5dd198c5359",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-heart-rate-c3",
+        "icon": "",
+        "label": "Heart-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 10,
+                "col": "#ff9900",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 520,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "56e3f62f5b16638f",
+        "type": "ui_chart",
+        "z": "dbf6846c835accaf",
+        "name": "",
+        "group": "fb5836fdc77fe91d",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 490,
+        "y": 280,
+        "wires": [
+            []
+        ]
     }
 ]
