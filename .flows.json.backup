@@ -129,44 +129,6 @@
         }
     },
     {
-        "id": "cf2cf577a28d9373",
-        "type": "ui_tab",
-        "name": "Sub",
-        "icon": "dashboard",
-        "order": 2,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "f2e47570d7e3d99e",
-        "type": "ui_group",
-        "name": "Home",
-        "tab": "cf2cf577a28d9373",
-        "order": 1,
-        "disp": true,
-        "width": 6,
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "fab7eefd92b5097f",
-        "type": "ui_tab",
-        "name": "Cyclist Dashboard",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "09ab234bed2ce55f",
-        "type": "ui_tab",
-        "name": "Map",
-        "icon": "dashboard",
-        "order": 3,
-        "disabled": false,
-        "hidden": false
-    },
-    {
         "id": "09e14cb17101e31e",
         "type": "ui_tab",
         "name": "Vitals",
@@ -1189,7 +1151,7 @@
         "type": "debug",
         "z": "49ef9935a0084879",
         "name": "debugbreath-rate-c1",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1228,7 +1190,7 @@
         "type": "debug",
         "z": "49ef9935a0084879",
         "name": "debug-speed-c1",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1267,7 +1229,7 @@
         "type": "debug",
         "z": "49ef9935a0084879",
         "name": "debug-cadence-c1",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1280,11 +1242,50 @@
         "wires": []
     },
     {
+        "id": "45863af7155bcd1f",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-gear-ratio",
+        "topic": "sensor/gear-ratio",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 760,
+        "wires": [
+            [
+                "c1e7ebbe5b022198",
+                "e56e5af83d41509c"
+            ]
+        ]
+    },
+    {
+        "id": "e56e5af83d41509c",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-gear-ratio-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 700,
+        "wires": []
+    },
+    {
         "id": "fae7ec1bee79ab61",
         "type": "debug",
         "z": "ddbfc14646ad5a06",
         "name": "debug-sensors-data-c2",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1889,7 +1890,8 @@
                 "860853d82f4d3f08",
                 "444849ed44d02f40",
                 "6380043ff06a7a99",
-                "622b72df693d5b84"
+                "622b72df693d5b84",
+                "e9b68dfa0cb82589"
             ]
         ]
     },
@@ -2182,22 +2184,118 @@
         ]
     },
     {
+        "id": "e9b68dfa0cb82589",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-gps-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.gps",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 1120,
+        "wires": [
+            [
+                "98f8054e2779a0d8",
+                "4d16a46eebde3b84"
+            ]
+        ]
+    },
+    {
+        "id": "98f8054e2779a0d8",
+        "type": "function",
+        "z": "ddbfc14646ad5a06",
+        "name": "function-gps-c2",
+        "func": "const gps = msg.payload;\n\nconst dataPoint = {\n  gps: {\n    // latitude: gps.latitude,\n    latitude: 44.4032861,\n    // longitude: gps.longitude\n    longitude: 8.9721722\n  },\n  id: \"c2\"\n};\n\nmsg.payload = dataPoint;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 1120,
+        "wires": [
+            [
+                "62e94c03fc51cd20",
+                "ee15fdad18eb20b8"
+            ]
+        ]
+    },
+    {
+        "id": "62e94c03fc51cd20",
+        "type": "link out",
+        "z": "ddbfc14646ad5a06",
+        "name": "link-out-gps-c2-map",
+        "mode": "link",
+        "links": [
+            "e8bd8f310b3aa2e8"
+        ],
+        "x": 985,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "ee15fdad18eb20b8",
+        "type": "debug",
+        "z": "ddbfc14646ad5a06",
+        "name": "debug-function-gps",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "4d16a46eebde3b84",
+        "type": "debug",
+        "z": "ddbfc14646ad5a06",
+        "name": "debug-change-gps",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 1260,
+        "wires": []
+    },
+    {
         "id": "c101a0cde894d388",
         "type": "ui_worldmap",
         "z": "a80b630b4b43614d",
         "group": "750128c11cd26c80",
         "order": 0,
-        "width": 0,
-        "height": 0,
+        "width": "6",
+        "height": "12",
         "name": "map",
-        "lat": "",
-        "lon": "",
-        "zoom": "",
-        "layer": "OSMG",
+        "lat": "44.4032861",
+        "lon": "8.9721722",
+        "zoom": "16",
+        "layer": "OSMC",
         "cluster": "",
         "maxage": "",
         "usermenu": "hide",
-        "layers": "hide",
+        "layers": "show",
         "panit": "false",
         "panlock": "false",
         "zoomlock": "false",
@@ -2207,14 +2305,103 @@
         "showruler": "false",
         "allowFileDrop": "false",
         "path": "/worldmap",
-        "overlist": "DR,CO,RA,DN,HM",
-        "maplist": "OSMG,OSMC,EsriC,EsriS,EsriT,EsriDG,UKOS",
+        "overlist": "DR,CO,DN,BU,RW,SN,TL,HM",
+        "maplist": "OSMC,EsriS",
         "mapname": "",
         "mapurl": "",
         "mapopt": "",
         "mapwms": false,
-        "x": 590,
+        "x": 730,
         "y": 160,
+        "wires": [],
+        "icon": "font-awesome/fa-map-marker"
+    },
+    {
+        "id": "e8bd8f310b3aa2e8",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-gps-c2-map",
+        "links": [
+            "62e94c03fc51cd20"
+        ],
+        "x": 235,
+        "y": 160,
+        "wires": [
+            [
+                "726de83bcb560713"
+            ]
+        ]
+    },
+    {
+        "id": "726de83bcb560713",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-gps-c2",
+        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.name = id;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 4,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 160,
+        "wires": [
+            [
+                "54b7ae6955ba7367",
+                "db2b0781b6c24e26"
+            ]
+        ]
+    },
+    {
+        "id": "54b7ae6955ba7367",
+        "type": "worldmap-tracks",
+        "z": "a80b630b4b43614d",
+        "name": "tracks",
+        "depth": "4",
+        "layer": "separate",
+        "smooth": false,
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "c101a0cde894d388",
+                "ceb2241c289562cd"
+            ]
+        ]
+    },
+    {
+        "id": "ceb2241c289562cd",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-tracks",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "db2b0781b6c24e26",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-function-gps-c2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 320,
         "wires": []
     },
     {
@@ -2245,7 +2432,7 @@
         "type": "debug",
         "z": "dbf6846c835accaf",
         "name": "debug-heart-rate-c3",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
