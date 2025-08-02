@@ -2288,8 +2288,8 @@
         "width": "6",
         "height": "12",
         "name": "map",
-        "lat": "44.4032861",
-        "lon": "8.9721722",
+        "lat": "",
+        "lon": "",
         "zoom": "16",
         "layer": "OSMC",
         "cluster": "",
@@ -2337,7 +2337,7 @@
         "type": "function",
         "z": "a80b630b4b43614d",
         "name": "function-gps-c2",
-        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;\n",
+        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.name = id;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 20,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2348,27 +2348,28 @@
         "y": 160,
         "wires": [
             [
-                "54b7ae6955ba7367",
                 "db2b0781b6c24e26",
-                "c101a0cde894d388"
+                "c101a0cde894d388",
+                "54b7ae6955ba7367"
             ]
         ]
     },
     {
-        "id": "54b7ae6955ba7367",
-        "type": "worldmap-tracks",
+        "id": "db2b0781b6c24e26",
+        "type": "debug",
         "z": "a80b630b4b43614d",
-        "name": "tracks",
-        "depth": "4",
-        "layer": "separate",
-        "smooth": false,
-        "x": 570,
-        "y": 160,
-        "wires": [
-            [
-                "ceb2241c289562cd"
-            ]
-        ]
+        "name": "debug-function-gps-c2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 320,
+        "wires": []
     },
     {
         "id": "ceb2241c289562cd",
@@ -2388,21 +2389,20 @@
         "wires": []
     },
     {
-        "id": "db2b0781b6c24e26",
-        "type": "debug",
+        "id": "54b7ae6955ba7367",
+        "type": "worldmap-tracks",
         "z": "a80b630b4b43614d",
-        "name": "debug-function-gps-c2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 320,
-        "wires": []
+        "name": "tracks",
+        "depth": "20",
+        "layer": "separate",
+        "smooth": false,
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "ceb2241c289562cd"
+            ]
+        ]
     },
     {
         "id": "3008db5d97d439b3",
