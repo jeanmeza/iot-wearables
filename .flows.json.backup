@@ -2300,7 +2300,7 @@
         "panlock": "false",
         "zoomlock": "false",
         "hiderightclick": "true",
-        "coords": "none",
+        "coords": "deg",
         "showgrid": "false",
         "showruler": "false",
         "allowFileDrop": "false",
