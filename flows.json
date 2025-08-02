@@ -2216,7 +2216,7 @@
         "type": "function",
         "z": "ddbfc14646ad5a06",
         "name": "function-gps-c2",
-        "func": "const gps = msg.payload;\n\nconst dataPoint = {\n  gps: {\n    latitude: gps.latitude,\n    // latitude: 44.4032861,\n    longitude: gps.longitude\n    // longitude: 8.9721722\n  },\n  id: \"c2\"\n};\n\nmsg.payload = dataPoint;\n\nreturn msg;\n",
+        "func": "const gps = msg.payload;\n\nconst dataPoint = {\n  gps: {\n    latitude: gps.latitude,\n    longitude: gps.longitude\n  },\n  id: \"c2\"\n};\n\nmsg.payload = dataPoint;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2288,8 +2288,8 @@
         "width": "6",
         "height": "12",
         "name": "map",
-        "lat": "44.4032861",
-        "lon": "8.9721722",
+        "lat": "",
+        "lon": "",
         "zoom": "16",
         "layer": "OSMC",
         "cluster": "",
@@ -2305,14 +2305,14 @@
         "showruler": "false",
         "allowFileDrop": "false",
         "path": "/worldmap",
-        "overlist": "DR,CO,DN,BU,RW,SN,TL,HM",
+        "overlist": "BU,RW,TL",
         "maplist": "OSMC,EsriS",
         "mapname": "",
         "mapurl": "",
         "mapopt": "",
         "mapwms": false,
-        "x": 730,
-        "y": 160,
+        "x": 570,
+        "y": 100,
         "wires": [],
         "icon": "font-awesome/fa-map-marker"
     },
@@ -2337,7 +2337,7 @@
         "type": "function",
         "z": "a80b630b4b43614d",
         "name": "function-gps-c2",
-        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.name = id;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 4,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;\n",
+        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2349,7 +2349,8 @@
         "wires": [
             [
                 "54b7ae6955ba7367",
-                "db2b0781b6c24e26"
+                "db2b0781b6c24e26",
+                "c101a0cde894d388"
             ]
         ]
     },
@@ -2365,7 +2366,6 @@
         "y": 160,
         "wires": [
             [
-                "c101a0cde894d388",
                 "ceb2241c289562cd"
             ]
         ]
@@ -2375,7 +2375,7 @@
         "type": "debug",
         "z": "a80b630b4b43614d",
         "name": "debug-tracks",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2392,7 +2392,7 @@
         "type": "debug",
         "z": "a80b630b4b43614d",
         "name": "debug-function-gps-c2",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
