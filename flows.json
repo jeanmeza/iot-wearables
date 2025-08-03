@@ -1281,6 +1281,96 @@
         "wires": []
     },
     {
+        "id": "c48f81f36ad9e132",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-gps",
+        "topic": "sensor/gps",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 1040,
+        "wires": [
+            [
+                "ae28a2bb56704cb6",
+                "a22996989185edb0"
+            ]
+        ]
+    },
+    {
+        "id": "ae28a2bb56704cb6",
+        "type": "function",
+        "z": "49ef9935a0084879",
+        "name": "function-gps-c1",
+        "func": "const gps = msg.payload.gps;\n\nconst dataPoint = {\n  gps: {\n    latitude: gps.latitude,\n    longitude: gps.longitude\n  },\n  id: \"c1\"\n};\n\nmsg.payload = dataPoint;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 1040,
+        "wires": [
+            [
+                "3d18fc3a9ef0aa8c",
+                "aaf7d0b78c0ba4d8"
+            ]
+        ]
+    },
+    {
+        "id": "3d18fc3a9ef0aa8c",
+        "type": "link out",
+        "z": "49ef9935a0084879",
+        "name": "link-out-gps-c1-map",
+        "mode": "link",
+        "links": [
+            "e8bd8f310b3aa2e8"
+        ],
+        "x": 785,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "a22996989185edb0",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-mqtt-gps",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "aaf7d0b78c0ba4d8",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-function-gps-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 1120,
+        "wires": []
+    },
+    {
         "id": "fae7ec1bee79ab61",
         "type": "debug",
         "z": "ddbfc14646ad5a06",
@@ -2288,8 +2378,8 @@
         "width": "6",
         "height": "12",
         "name": "map",
-        "lat": "",
-        "lon": "",
+        "lat": "44.403050",
+        "lon": "8.971959",
         "zoom": "16",
         "layer": "OSMC",
         "cluster": "",
@@ -2322,6 +2412,7 @@
         "z": "a80b630b4b43614d",
         "name": "link-in-gps-c2-map",
         "links": [
+            "3d18fc3a9ef0aa8c",
             "62e94c03fc51cd20"
         ],
         "x": 235,
@@ -2336,15 +2427,15 @@
         "id": "726de83bcb560713",
         "type": "function",
         "z": "a80b630b4b43614d",
-        "name": "function-gps-c2",
-        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.name = id;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 20,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;",
+        "name": "function-gps",
+        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  // layer: `cyclist-${id}`,\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 20,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
+        "x": 370,
         "y": 160,
         "wires": [
             [
@@ -2394,7 +2485,7 @@
         "z": "a80b630b4b43614d",
         "name": "tracks",
         "depth": "20",
-        "layer": "separate",
+        "layer": "combined",
         "smooth": false,
         "x": 570,
         "y": 160,
