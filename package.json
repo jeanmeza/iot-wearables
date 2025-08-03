@@ -3,7 +3,9 @@
     "description": "A Node-RED Project",
     "version": "0.0.1",
     "dependencies": {
-        "node-red-dashboard": "github:node-red/node-red-dashboard"
+        "node-red-dashboard": "github:node-red/node-red-dashboard",
+        "node-red-contrib-web-worldmap": "5.5.1",
+        "node-red-contrib-ui-artless-gauge2": "0.3.13"
     },
     "node-red": {
         "settings": {
