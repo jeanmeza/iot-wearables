@@ -27,6 +27,7 @@ module.exports = {
 7. Breath-rate: https://wokwi.com/projects/438184336445964289
 8. Heart-rate: https://wokwi.com/projects/438183875548528641
 9. MQTT Explorer is used to test the correctness of our mqtt code.
+10. This GitHub repo simulates Howdy Sensor: https://github.com/jeanmeza/iot-data-simulator
 
 ## Wokwi (backup file)
 
