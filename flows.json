@@ -32,6 +32,14 @@
         "env": []
     },
     {
+        "id": "bed7f33f2088ee77",
+        "type": "tab",
+        "label": "TestWithNodeApp",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "03e7604004065379",
         "type": "ui_base",
         "theme": {
@@ -192,7 +200,6 @@
     {
         "id": "f3230bcd2993c42b",
         "type": "global-config",
-        "name": "global-config",
         "env": [
             {
                 "name": "home",
@@ -2647,5 +2654,43 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "e4e8fc958dc5b426",
+        "type": "mqtt in",
+        "z": "bed7f33f2088ee77",
+        "name": "",
+        "topic": "sensors/howdy/data",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 220,
+        "wires": [
+            [
+                "dc715fe23ac29f43"
+            ]
+        ]
+    },
+    {
+        "id": "dc715fe23ac29f43",
+        "type": "debug",
+        "z": "bed7f33f2088ee77",
+        "name": "printReceivedMessage",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 220,
+        "wires": []
     }
 ]

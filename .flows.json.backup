@@ -2450,7 +2450,7 @@
         "type": "debug",
         "z": "a80b630b4b43614d",
         "name": "debug-function-gps-c2",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
