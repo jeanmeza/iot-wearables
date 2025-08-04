@@ -214,7 +214,7 @@
         "name": "Team",
         "tab": "feaeb291767880fa",
         "order": 1,
-        "disp": true,
+        "disp": false,
         "width": 6,
         "collapse": false,
         "className": ""
@@ -226,6 +226,17 @@
         "tab": "09e14cb17101e31e",
         "order": 3,
         "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0c4edd0bdb18386e",
+        "type": "ui_group",
+        "name": "Team's Vitals",
+        "tab": "feaeb291767880fa",
+        "order": 2,
+        "disp": false,
         "width": 6,
         "collapse": false,
         "className": ""
@@ -243,8 +254,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 790,
-        "y": 100,
+        "x": 770,
+        "y": 80,
         "wires": []
     },
     {
@@ -329,7 +340,8 @@
                 "b0d330a56d92b095",
                 "1462cc644e7a8637",
                 "e452c6a1dc7e8435",
-                "22a064db95cca791"
+                "22a064db95cca791",
+                "91de73cdcedeaacf"
             ]
         ]
     },
@@ -439,7 +451,7 @@
         "id": "52184ced46f6cdd0",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "change-breathing-rate-c1",
+        "name": "change-breath-rate-c1",
         "rules": [
             {
                 "t": "set",
@@ -454,7 +466,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 770,
+        "x": 760,
         "y": 880,
         "wires": [
             [
@@ -1370,6 +1382,19 @@
         "wires": []
     },
     {
+        "id": "91de73cdcedeaacf",
+        "type": "link out",
+        "z": "49ef9935a0084879",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "2dfce3b8d0a7cbed"
+        ],
+        "x": 955,
+        "y": 100,
+        "wires": []
+    },
+    {
         "id": "fae7ec1bee79ab61",
         "type": "debug",
         "z": "ddbfc14646ad5a06",
@@ -1437,7 +1462,8 @@
             [
                 "24eb7f263c2fdbe3",
                 "0886af86e56a0347",
-                "124b960563e8f2c6"
+                "124b960563e8f2c6",
+                "7cfa16d77188691b"
             ]
         ]
     },
@@ -1549,7 +1575,7 @@
         "id": "622b72df693d5b84",
         "type": "change",
         "z": "ddbfc14646ad5a06",
-        "name": "change-breathing-rate-c2",
+        "name": "change-breath-rate-c2",
         "rules": [
             {
                 "t": "set",
@@ -1564,7 +1590,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 690,
+        "x": 680,
         "y": 900,
         "wires": [
             [
@@ -2237,7 +2263,7 @@
         "order": 9,
         "width": 0,
         "height": 0,
-        "label": "Breathing-rate",
+        "label": "Breath-rate",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -2369,6 +2395,19 @@
         "wires": []
     },
     {
+        "id": "7cfa16d77188691b",
+        "type": "link out",
+        "z": "ddbfc14646ad5a06",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "2dfce3b8d0a7cbed"
+        ],
+        "x": 875,
+        "y": 80,
+        "wires": []
+    },
+    {
         "id": "c101a0cde894d388",
         "type": "ui_worldmap",
         "z": "a80b630b4b43614d",
@@ -2458,7 +2497,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 620,
-        "y": 320,
+        "y": 220,
         "wires": []
     },
     {
@@ -2475,7 +2514,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 750,
-        "y": 240,
+        "y": 160,
         "wires": []
     },
     {
@@ -2493,6 +2532,152 @@
                 "ceb2241c289562cd"
             ]
         ]
+    },
+    {
+        "id": "2dfce3b8d0a7cbed",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-heart-rate",
+        "links": [
+            "7cfa16d77188691b",
+            "91de73cdcedeaacf",
+            "6fb07852b9e315fe"
+        ],
+        "x": 225,
+        "y": 420,
+        "wires": [
+            [
+                "7ef72dedf1a06f44"
+            ]
+        ]
+    },
+    {
+        "id": "7ef72dedf1a06f44",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-avg-heart-rate",
+        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 420,
+        "wires": [
+            [
+                "2b60cd532b9bd871",
+                "679f1795bb872a06",
+                "6907476c46abd426"
+            ]
+        ]
+    },
+    {
+        "id": "2b60cd532b9bd871",
+        "type": "ui_artlessgauge2",
+        "z": "a80b630b4b43614d",
+        "group": "0c4edd0bdb18386e",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-avg-heart-rate",
+        "icon": "",
+        "label": "Average Heart-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 10,
+                "col": "#ff9900",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 640,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "679f1795bb872a06",
+        "type": "ui_chart",
+        "z": "a80b630b4b43614d",
+        "name": "chart-avg-heart-rate",
+        "group": "0c4edd0bdb18386e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Average Heart-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6907476c46abd426",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-avg-heart-rate",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 360,
+        "wires": []
     },
     {
         "id": "3008db5d97d439b3",
@@ -2534,7 +2719,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 780,
-        "y": 100,
+        "y": 140,
         "wires": []
     },
     {
@@ -2542,7 +2727,7 @@
         "type": "ui_artlessgauge2",
         "z": "dbf6846c835accaf",
         "group": "fb5836fdc77fe91d",
-        "order": 0,
+        "order": 5,
         "width": 0,
         "height": 0,
         "name": "gauge-heart-rate-c3",
@@ -2603,7 +2788,7 @@
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 780,
-        "y": 180,
+        "y": 200,
         "wires": []
     },
     {
@@ -2685,7 +2870,8 @@
             [
                 "09facc7e96912cb7",
                 "c8e2e5dd198c5359",
-                "56e3f62f5b16638f"
+                "56e3f62f5b16638f",
+                "6fb07852b9e315fe"
             ]
         ]
     },
@@ -2693,7 +2879,7 @@
         "id": "f46171a97f493b65",
         "type": "function",
         "z": "dbf6846c835accaf",
-        "name": "function-breath-frequency-c3",
+        "name": "function-breath-rate-c3",
         "func": "if (msg.payload.measureType === \"BreathFrequency\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
         "outputs": 1,
         "timeout": 0,
@@ -2701,7 +2887,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
+        "x": 520,
         "y": 320,
         "wires": [
             [
@@ -2715,7 +2901,7 @@
         "id": "6361da7b0cfc85d6",
         "type": "debug",
         "z": "dbf6846c835accaf",
-        "name": "debug-breath-freq-c3",
+        "name": "debug-breath-rate-c3",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -2849,12 +3035,12 @@
         "type": "ui_artlessgauge2",
         "z": "dbf6846c835accaf",
         "group": "fb5836fdc77fe91d",
-        "order": 2,
+        "order": 6,
         "width": 0,
         "height": 0,
-        "name": "gauge-breath-frequency-c3",
+        "name": "gauge-breath-rate-c3",
         "icon": "",
-        "label": "Breath Frequency",
+        "label": "Breath-rate",
         "unit": "",
         "layout": "linear",
         "decimals": 0,
@@ -2871,21 +3057,45 @@
         "sectors": [
             {
                 "val": 0,
-                "col": "#ff9900",
+                "col": "#f66151",
                 "t": "min",
                 "dot": 0
             },
             {
-                "val": 10,
-                "col": "#ff9900",
+                "val": 80,
+                "col": "#f66151",
                 "t": "max",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
                 "dot": 0
             }
         ],
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 840,
+        "x": 820,
         "y": 380,
         "wires": []
     },
@@ -2893,12 +3103,12 @@
         "id": "e1f2405528005fe9",
         "type": "ui_chart",
         "z": "dbf6846c835accaf",
-        "name": "chart-breath-frequency-c3",
+        "name": "chart-breath-rate-c3",
         "group": "fb5836fdc77fe91d",
-        "order": 3,
+        "order": 2,
         "width": 0,
         "height": 0,
-        "label": "Breath Frequency",
+        "label": "Breath-rate",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -2927,7 +3137,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 830,
+        "x": 820,
         "y": 440,
         "wires": [
             []
@@ -2940,7 +3150,7 @@
         "d": true,
         "name": "chart-respiration-c3",
         "group": "fb5836fdc77fe91d",
-        "order": 4,
+        "order": 3,
         "width": 0,
         "height": 0,
         "label": "Respiration",
@@ -2984,7 +3194,7 @@
         "z": "dbf6846c835accaf",
         "d": true,
         "group": "fb5836fdc77fe91d",
-        "order": 5,
+        "order": 7,
         "width": 0,
         "height": 0,
         "name": "gauge-respiration-c3",
@@ -3029,7 +3239,7 @@
         "type": "ui_artlessgauge2",
         "z": "dbf6846c835accaf",
         "group": "fb5836fdc77fe91d",
-        "order": 6,
+        "order": 4,
         "width": 0,
         "height": 0,
         "name": "gauge-intensity-c3",
@@ -3086,7 +3296,7 @@
                 "dot": 0
             }
         ],
-        "lineWidth": 3,
+        "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 1030,
@@ -3119,5 +3329,18 @@
                 "f216efaf8e033a69"
             ]
         ]
+    },
+    {
+        "id": "6fb07852b9e315fe",
+        "type": "link out",
+        "z": "dbf6846c835accaf",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "2dfce3b8d0a7cbed"
+        ],
+        "x": 695,
+        "y": 100,
+        "wires": []
     }
 ]
