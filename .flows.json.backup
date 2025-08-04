@@ -2705,7 +2705,9 @@
         "y": 320,
         "wires": [
             [
-                "6361da7b0cfc85d6"
+                "6361da7b0cfc85d6",
+                "9f875ef5685a14e4",
+                "e1f2405528005fe9"
             ]
         ]
     },
@@ -2722,7 +2724,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 840,
+        "x": 820,
         "y": 320,
         "wires": []
     },
@@ -2739,10 +2741,12 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
-                "ed4d456bdfee5e86"
+                "ed4d456bdfee5e86",
+                "d75477a8dd5f6f69",
+                "db6e472bc601395a"
             ]
         ]
     },
@@ -2751,7 +2755,7 @@
         "type": "function",
         "z": "dbf6846c835accaf",
         "name": "function-acceleration-c3",
-        "func": "if (msg.payload.measureType === \"AccelerationX,Y,Z\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "func": "const id = msg.payload.userId;\nconst type = msg.payload.measureType;\nconst values = msg.payload.value;\nconst timestamp = msg.payload.date;\n\nif (!flow.get(\"accelBuffer\")) flow.set(\"accelBuffer\", {});\nconst buffer = flow.get(\"accelBuffer\");\n\nif (!buffer[id]) buffer[id] = {};\nbuffer[id][type] = values;\nbuffer[id].timestamp = timestamp;\n\nif (\n  buffer[id][\"AccelerationX\"] &&\n  buffer[id][\"AccelerationY\"] &&\n  buffer[id][\"AccelerationZ\"]\n) {\n  const x = buffer[id][\"AccelerationX\"];\n  const y = buffer[id][\"AccelerationY\"];\n  const z = buffer[id][\"AccelerationZ\"];\n\n  const total = x.map((_, i) => {\n    return Math.sqrt(x[i] ** 2 + y[i] ** 2 + z[i] ** 2);\n  });\n\n  let avg = total.reduce((sum, v) => sum + v, 0) / total.length;\n\n  // Custom rounding\n  if (avg < 0.25) {\n    avg = 0;\n  } else if (avg < 0.75) {\n    avg = 0.5;\n  } else if (avg < 1.25) {\n    avg = 1;\n  } else if (avg < 1.75) {\n    avg = 1.5;\n  } else if (avg < 2.25) {\n    avg = 2;\n  } else if (avg < 2.75) {\n    avg = 2.5;\n  } else {\n    avg = 3;\n}\n\n  // Classify average intensity\n  /*let overallIntensity;\n  if (avg < 0.5) overallIntensity = \"idle\";\n  else if (avg < 1.5) overallIntensity = \"low\";\n  else if (avg < 2.5) overallIntensity = \"moderate\";\n  else overallIntensity = \"high\";*/\n\n  msg.payload = {\n    userId: id,\n    timestamp,\n    avgAcceleration: avg,\n    // intensity: overallIntensity\n  };\n\n  // Reset buffer\n  delete buffer[id][\"AccelerationX\"];\n  delete buffer[id][\"AccelerationY\"];\n  delete buffer[id][\"AccelerationZ\"];\n  flow.set(\"accelBuffer\", buffer);\n\n  return msg;\n}\n\nflow.set(\"accelBuffer\", buffer);\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2759,10 +2763,11 @@
         "finalize": "",
         "libs": [],
         "x": 530,
-        "y": 580,
+        "y": 700,
         "wires": [
             [
-                "9cc81a19b3975140"
+                "9cc81a19b3975140",
+                "ba4f724e910e762b"
             ]
         ]
     },
@@ -2770,8 +2775,9 @@
         "id": "2db025ba0b9c11b9",
         "type": "function",
         "z": "dbf6846c835accaf",
+        "d": true,
         "name": "function-position-c3",
-        "func": "if (msg.payload.measureType === \"position\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "func": "if (msg.payload.measureType === \"Position\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2779,7 +2785,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 700,
+        "y": 820,
         "wires": [
             [
                 "409191eaba89764a"
@@ -2800,7 +2806,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 760,
-        "y": 460,
+        "y": 500,
         "wires": []
     },
     {
@@ -2808,7 +2814,7 @@
         "type": "debug",
         "z": "dbf6846c835accaf",
         "name": "debug-acc-c3",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2816,14 +2822,15 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 780,
-        "y": 580,
+        "x": 760,
+        "y": 760,
         "wires": []
     },
     {
         "id": "409191eaba89764a",
         "type": "debug",
         "z": "dbf6846c835accaf",
+        "d": true,
         "name": "debug-pos-c3",
         "active": true,
         "tosidebar": true,
@@ -2834,7 +2841,281 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "9f875ef5685a14e4",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-breath-frequency-c3",
+        "icon": "",
+        "label": "Breath Frequency",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 10,
+                "col": "#ff9900",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 840,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e1f2405528005fe9",
+        "type": "ui_chart",
+        "z": "dbf6846c835accaf",
+        "name": "chart-breath-frequency-c3",
+        "group": "fb5836fdc77fe91d",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Breath Frequency",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 830,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d75477a8dd5f6f69",
+        "type": "ui_chart",
+        "z": "dbf6846c835accaf",
+        "name": "chart-respiration-c3",
+        "group": "fb5836fdc77fe91d",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Respiration",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 770,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db6e472bc601395a",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-respiration-c3",
+        "icon": "",
+        "label": "Respiration",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 10,
+                "col": "#ff9900",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 780,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "f216efaf8e033a69",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "icon": "",
+        "label": "Intensity",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 0.5,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 5,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            },
+            {
+                "val": 1.5,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 2.5,
+                "col": "#ffbe6f",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 3,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 1020,
         "y": 700,
         "wires": []
+    },
+    {
+        "id": "ba4f724e910e762b",
+        "type": "change",
+        "z": "dbf6846c835accaf",
+        "name": "change-avgAcceleration-c3",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.avgAcceleration",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 700,
+        "wires": [
+            [
+                "f216efaf8e033a69"
+            ]
+        ]
     }
 ]
