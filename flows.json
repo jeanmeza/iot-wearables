@@ -471,7 +471,8 @@
         "wires": [
             [
                 "7a561cec02a71d51",
-                "aa32617a3f2ee30a"
+                "aa32617a3f2ee30a",
+                "63ba3a5c630d0d64"
             ]
         ]
     },
@@ -1170,8 +1171,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 760,
-        "y": 960,
+        "x": 740,
+        "y": 940,
         "wires": []
     },
     {
@@ -1385,13 +1386,26 @@
         "id": "91de73cdcedeaacf",
         "type": "link out",
         "z": "49ef9935a0084879",
-        "name": "link out 2",
+        "name": "link-out-heart-rate-c1",
         "mode": "link",
         "links": [
             "2dfce3b8d0a7cbed"
         ],
         "x": 955,
         "y": 100,
+        "wires": []
+    },
+    {
+        "id": "63ba3a5c630d0d64",
+        "type": "link out",
+        "z": "49ef9935a0084879",
+        "name": "link-out-breath-rate-c1",
+        "mode": "link",
+        "links": [
+            "9baa9f6a2db5455d"
+        ],
+        "x": 935,
+        "y": 980,
         "wires": []
     },
     {
@@ -1596,7 +1610,8 @@
             [
                 "fcd141fc912448ed",
                 "70eeb2dd7e485987",
-                "31571967c0263764"
+                "31571967c0263764",
+                "536297d9bfb29c17"
             ]
         ]
     },
@@ -2398,13 +2413,26 @@
         "id": "7cfa16d77188691b",
         "type": "link out",
         "z": "ddbfc14646ad5a06",
-        "name": "link out 1",
+        "name": "link-out-heart-rate-c2",
         "mode": "link",
         "links": [
             "2dfce3b8d0a7cbed"
         ],
         "x": 875,
         "y": 80,
+        "wires": []
+    },
+    {
+        "id": "536297d9bfb29c17",
+        "type": "link out",
+        "z": "ddbfc14646ad5a06",
+        "name": "link-out-breath-rate-c2",
+        "mode": "link",
+        "links": [
+            "9baa9f6a2db5455d"
+        ],
+        "x": 855,
+        "y": 1060,
         "wires": []
     },
     {
@@ -2537,14 +2565,14 @@
         "id": "2dfce3b8d0a7cbed",
         "type": "link in",
         "z": "a80b630b4b43614d",
-        "name": "link-in-heart-rate",
+        "name": "link-in-avg-heart-rate",
         "links": [
+            "6fb07852b9e315fe",
             "7cfa16d77188691b",
-            "91de73cdcedeaacf",
-            "6fb07852b9e315fe"
+            "91de73cdcedeaacf"
         ],
         "x": 225,
-        "y": 420,
+        "y": 380,
         "wires": [
             [
                 "7ef72dedf1a06f44"
@@ -2564,7 +2592,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 420,
+        "y": 380,
         "wires": [
             [
                 "2b60cd532b9bd871",
@@ -2578,7 +2606,7 @@
         "type": "ui_artlessgauge2",
         "z": "a80b630b4b43614d",
         "group": "0c4edd0bdb18386e",
-        "order": 1,
+        "order": 3,
         "width": 0,
         "height": 0,
         "name": "gauge-avg-heart-rate",
@@ -2639,7 +2667,7 @@
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 640,
-        "y": 420,
+        "y": 380,
         "wires": []
     },
     {
@@ -2648,7 +2676,7 @@
         "z": "a80b630b4b43614d",
         "name": "chart-avg-heart-rate",
         "group": "0c4edd0bdb18386e",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
         "label": "Average Heart-rate",
@@ -2681,7 +2709,7 @@
         "useDifferentColor": false,
         "className": "",
         "x": 640,
-        "y": 480,
+        "y": 440,
         "wires": [
             []
         ]
@@ -2700,8 +2728,177 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 640,
-        "y": 360,
+        "y": 320,
         "wires": []
+    },
+    {
+        "id": "9baa9f6a2db5455d",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-avg-breath-rate",
+        "links": [
+            "536297d9bfb29c17",
+            "63ba3a5c630d0d64"
+        ],
+        "x": 225,
+        "y": 560,
+        "wires": [
+            [
+                "2225625156a77d98"
+            ]
+        ]
+    },
+    {
+        "id": "2225625156a77d98",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-avg-breath-rate",
+        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "85e30e57ee0e16a5",
+                "2f2db6699c2549e6",
+                "39a4c9214a6d9942"
+            ]
+        ]
+    },
+    {
+        "id": "85e30e57ee0e16a5",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-avg-breath-rate",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2f2db6699c2549e6",
+        "type": "ui_artlessgauge2",
+        "z": "a80b630b4b43614d",
+        "group": "0c4edd0bdb18386e",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-avg-breath-rate",
+        "icon": "",
+        "label": "Average Breath-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 640,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "39a4c9214a6d9942",
+        "type": "ui_chart",
+        "z": "a80b630b4b43614d",
+        "name": "chart-avg-breath-rate",
+        "group": "0c4edd0bdb18386e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Average Breath-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#dc8add",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 640,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "3008db5d97d439b3",
@@ -2917,7 +3114,8 @@
             [
                 "6361da7b0cfc85d6",
                 "9f875ef5685a14e4",
-                "e1f2405528005fe9"
+                "e1f2405528005fe9",
+                "28f1ee3225dcbdbf"
             ]
         ]
     },
@@ -2951,7 +3149,7 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "ed4d456bdfee5e86",
@@ -2973,7 +3171,7 @@
         "finalize": "",
         "libs": [],
         "x": 530,
-        "y": 700,
+        "y": 740,
         "wires": [
             [
                 "9cc81a19b3975140",
@@ -2995,7 +3193,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 820,
+        "y": 860,
         "wires": [
             [
                 "409191eaba89764a"
@@ -3016,7 +3214,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 760,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -3033,7 +3231,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 760,
-        "y": 760,
+        "y": 800,
         "wires": []
     },
     {
@@ -3051,7 +3249,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 820,
+        "y": 860,
         "wires": []
     },
     {
@@ -3086,12 +3284,6 @@
                 "dot": 0
             },
             {
-                "val": 80,
-                "col": "#f66151",
-                "t": "max",
-                "dot": 0
-            },
-            {
                 "val": 12,
                 "col": "#f9f06b",
                 "t": "sec",
@@ -3113,6 +3305,12 @@
                 "val": 45,
                 "col": "#f66151",
                 "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
                 "dot": 0
             }
         ],
@@ -3207,7 +3405,7 @@
         "useDifferentColor": false,
         "className": "",
         "x": 770,
-        "y": 620,
+        "y": 660,
         "wires": [
             []
         ]
@@ -3255,7 +3453,7 @@
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 780,
-        "y": 560,
+        "y": 600,
         "wires": []
     },
     {
@@ -3324,7 +3522,7 @@
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 1030,
-        "y": 700,
+        "y": 740,
         "wires": []
     },
     {
@@ -3347,7 +3545,7 @@
         "to": "",
         "reg": false,
         "x": 800,
-        "y": 700,
+        "y": 740,
         "wires": [
             [
                 "f216efaf8e033a69"
@@ -3358,13 +3556,24 @@
         "id": "6fb07852b9e315fe",
         "type": "link out",
         "z": "dbf6846c835accaf",
-        "name": "link out 3",
+        "name": "link-out-heart-rate-c3",
         "mode": "link",
         "links": [
             "2dfce3b8d0a7cbed"
         ],
         "x": 695,
         "y": 100,
+        "wires": []
+    },
+    {
+        "id": "28f1ee3225dcbdbf",
+        "type": "link out",
+        "z": "dbf6846c835accaf",
+        "name": "link-out-breath-rate-c3",
+        "mode": "link",
+        "links": [],
+        "x": 735,
+        "y": 500,
         "wires": []
     }
 ]
