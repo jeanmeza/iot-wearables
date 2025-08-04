@@ -3296,7 +3296,7 @@
                 "dot": 0
             }
         ],
-        "lineWidth": 3,
+        "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 1030,

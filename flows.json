@@ -2600,13 +2600,37 @@
         "sectors": [
             {
                 "val": 0,
-                "col": "#ff9900",
+                "col": "#f66151",
                 "t": "min",
                 "dot": 0
             },
             {
-                "val": 10,
-                "col": "#ff9900",
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 110,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 160,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
                 "t": "max",
                 "dot": 0
             }
@@ -2636,9 +2660,9 @@
         "dot": false,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
