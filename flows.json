@@ -3451,7 +3451,7 @@
         "type": "debug",
         "z": "a80b630b4b43614d",
         "name": "debug-avg-breath-rate",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,

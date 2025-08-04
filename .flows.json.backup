@@ -16,17 +16,17 @@
         "env": []
     },
     {
-        "id": "a80b630b4b43614d",
+        "id": "dbf6846c835accaf",
         "type": "tab",
-        "label": "Team",
+        "label": "Cyclist 3",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "dbf6846c835accaf",
+        "id": "a80b630b4b43614d",
         "type": "tab",
-        "label": "Cyclist 3",
+        "label": "Team",
         "disabled": false,
         "info": "",
         "env": []
@@ -2436,471 +2436,6 @@
         "wires": []
     },
     {
-        "id": "c101a0cde894d388",
-        "type": "ui_worldmap",
-        "z": "a80b630b4b43614d",
-        "group": "750128c11cd26c80",
-        "order": 0,
-        "width": "6",
-        "height": "12",
-        "name": "map",
-        "lat": "44.403050",
-        "lon": "8.971959",
-        "zoom": "16",
-        "layer": "OSMC",
-        "cluster": "",
-        "maxage": "",
-        "usermenu": "hide",
-        "layers": "show",
-        "panit": "false",
-        "panlock": "false",
-        "zoomlock": "false",
-        "hiderightclick": "true",
-        "coords": "deg",
-        "showgrid": "false",
-        "showruler": "false",
-        "allowFileDrop": "false",
-        "path": "/worldmap",
-        "overlist": "BU,RW,TL",
-        "maplist": "OSMC,EsriS",
-        "mapname": "",
-        "mapurl": "",
-        "mapopt": "",
-        "mapwms": false,
-        "x": 570,
-        "y": 100,
-        "wires": [],
-        "icon": "font-awesome/fa-map-marker"
-    },
-    {
-        "id": "e8bd8f310b3aa2e8",
-        "type": "link in",
-        "z": "a80b630b4b43614d",
-        "name": "link-in-gps-c2-map",
-        "links": [
-            "3d18fc3a9ef0aa8c",
-            "62e94c03fc51cd20"
-        ],
-        "x": 235,
-        "y": 160,
-        "wires": [
-            [
-                "726de83bcb560713"
-            ]
-        ]
-    },
-    {
-        "id": "726de83bcb560713",
-        "type": "function",
-        "z": "a80b630b4b43614d",
-        "name": "function-gps",
-        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  // layer: `cyclist-${id}`,\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 20,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 370,
-        "y": 160,
-        "wires": [
-            [
-                "db2b0781b6c24e26",
-                "c101a0cde894d388",
-                "54b7ae6955ba7367"
-            ]
-        ]
-    },
-    {
-        "id": "db2b0781b6c24e26",
-        "type": "debug",
-        "z": "a80b630b4b43614d",
-        "name": "debug-function-gps-c2",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "ceb2241c289562cd",
-        "type": "debug",
-        "z": "a80b630b4b43614d",
-        "name": "debug-tracks",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 750,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "54b7ae6955ba7367",
-        "type": "worldmap-tracks",
-        "z": "a80b630b4b43614d",
-        "name": "tracks",
-        "depth": "20",
-        "layer": "combined",
-        "smooth": false,
-        "x": 570,
-        "y": 160,
-        "wires": [
-            [
-                "ceb2241c289562cd"
-            ]
-        ]
-    },
-    {
-        "id": "2dfce3b8d0a7cbed",
-        "type": "link in",
-        "z": "a80b630b4b43614d",
-        "name": "link-in-avg-heart-rate",
-        "links": [
-            "6fb07852b9e315fe",
-            "7cfa16d77188691b",
-            "91de73cdcedeaacf"
-        ],
-        "x": 225,
-        "y": 380,
-        "wires": [
-            [
-                "7ef72dedf1a06f44"
-            ]
-        ]
-    },
-    {
-        "id": "7ef72dedf1a06f44",
-        "type": "function",
-        "z": "a80b630b4b43614d",
-        "name": "function-avg-heart-rate",
-        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 380,
-        "y": 380,
-        "wires": [
-            [
-                "2b60cd532b9bd871",
-                "679f1795bb872a06",
-                "6907476c46abd426"
-            ]
-        ]
-    },
-    {
-        "id": "2b60cd532b9bd871",
-        "type": "ui_artlessgauge2",
-        "z": "a80b630b4b43614d",
-        "group": "0c4edd0bdb18386e",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "name": "gauge-avg-heart-rate",
-        "icon": "",
-        "label": "Average Heart-rate",
-        "unit": "",
-        "layout": "linear",
-        "decimals": 0,
-        "differential": false,
-        "minmax": false,
-        "colorTrack": "#555555",
-        "style": "",
-        "colorFromTheme": true,
-        "property": "payload",
-        "secondary": "secondary",
-        "inline": false,
-        "animate": true,
-        "log2": false,
-        "sectors": [
-            {
-                "val": 0,
-                "col": "#f66151",
-                "t": "min",
-                "dot": 0
-            },
-            {
-                "val": 50,
-                "col": "#f9f06b",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 60,
-                "col": "#8ff0a4",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 110,
-                "col": "#f9f06b",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 160,
-                "col": "#f66151",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 200,
-                "col": "#f66151",
-                "t": "max",
-                "dot": 0
-            }
-        ],
-        "lineWidth": 3,
-        "bgcolorFromTheme": true,
-        "diffCenter": "",
-        "x": 640,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "679f1795bb872a06",
-        "type": "ui_chart",
-        "z": "a80b630b4b43614d",
-        "name": "chart-avg-heart-rate",
-        "group": "0c4edd0bdb18386e",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "label": "Average Heart-rate",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": "15",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "60",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 640,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6907476c46abd426",
-        "type": "debug",
-        "z": "a80b630b4b43614d",
-        "name": "debug-avg-heart-rate",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 640,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "9baa9f6a2db5455d",
-        "type": "link in",
-        "z": "a80b630b4b43614d",
-        "name": "link-in-avg-breath-rate",
-        "links": [
-            "536297d9bfb29c17",
-            "63ba3a5c630d0d64"
-        ],
-        "x": 225,
-        "y": 560,
-        "wires": [
-            [
-                "2225625156a77d98"
-            ]
-        ]
-    },
-    {
-        "id": "2225625156a77d98",
-        "type": "function",
-        "z": "a80b630b4b43614d",
-        "name": "function-avg-breath-rate",
-        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 390,
-        "y": 560,
-        "wires": [
-            [
-                "85e30e57ee0e16a5",
-                "2f2db6699c2549e6",
-                "39a4c9214a6d9942"
-            ]
-        ]
-    },
-    {
-        "id": "85e30e57ee0e16a5",
-        "type": "debug",
-        "z": "a80b630b4b43614d",
-        "name": "debug-avg-breath-rate",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 640,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "2f2db6699c2549e6",
-        "type": "ui_artlessgauge2",
-        "z": "a80b630b4b43614d",
-        "group": "0c4edd0bdb18386e",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "name": "gauge-avg-breath-rate",
-        "icon": "",
-        "label": "Average Breath-rate",
-        "unit": "",
-        "layout": "linear",
-        "decimals": 0,
-        "differential": false,
-        "minmax": false,
-        "colorTrack": "#555555",
-        "style": "",
-        "colorFromTheme": true,
-        "property": "payload",
-        "secondary": "secondary",
-        "inline": false,
-        "animate": true,
-        "log2": false,
-        "sectors": [
-            {
-                "val": 0,
-                "col": "#f66151",
-                "t": "min",
-                "dot": 0
-            },
-            {
-                "val": 12,
-                "col": "#f9f06b",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 20,
-                "col": "#8ff0a4",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 35,
-                "col": "#f9f06b",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 45,
-                "col": "#f66151",
-                "t": "sec",
-                "dot": 0
-            },
-            {
-                "val": 80,
-                "col": "#f66151",
-                "t": "max",
-                "dot": 0
-            }
-        ],
-        "lineWidth": "5",
-        "bgcolorFromTheme": true,
-        "diffCenter": "",
-        "x": 640,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "39a4c9214a6d9942",
-        "type": "ui_chart",
-        "z": "a80b630b4b43614d",
-        "name": "chart-avg-breath-rate",
-        "group": "0c4edd0bdb18386e",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "label": "Average Breath-rate",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#dc8add",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 640,
-        "y": 640,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "3008db5d97d439b3",
         "type": "mqtt in",
         "z": "dbf6846c835accaf",
@@ -3575,5 +3110,470 @@
         "x": 735,
         "y": 500,
         "wires": []
+    },
+    {
+        "id": "c101a0cde894d388",
+        "type": "ui_worldmap",
+        "z": "a80b630b4b43614d",
+        "group": "750128c11cd26c80",
+        "order": 0,
+        "width": "6",
+        "height": "12",
+        "name": "map",
+        "lat": "44.403050",
+        "lon": "8.971959",
+        "zoom": "16",
+        "layer": "OSMC",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "hide",
+        "layers": "show",
+        "panit": "false",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "true",
+        "coords": "deg",
+        "showgrid": "false",
+        "showruler": "false",
+        "allowFileDrop": "false",
+        "path": "/worldmap",
+        "overlist": "BU,RW,TL",
+        "maplist": "OSMC,EsriS",
+        "mapname": "",
+        "mapurl": "",
+        "mapopt": "",
+        "mapwms": false,
+        "x": 570,
+        "y": 100,
+        "wires": [],
+        "icon": "font-awesome/fa-map-marker"
+    },
+    {
+        "id": "e8bd8f310b3aa2e8",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-gps-c2-map",
+        "links": [
+            "3d18fc3a9ef0aa8c",
+            "62e94c03fc51cd20"
+        ],
+        "x": 235,
+        "y": 160,
+        "wires": [
+            [
+                "726de83bcb560713"
+            ]
+        ]
+    },
+    {
+        "id": "726de83bcb560713",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-gps",
+        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  // layer: `cyclist-${id}`,\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 20,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 160,
+        "wires": [
+            [
+                "db2b0781b6c24e26",
+                "c101a0cde894d388",
+                "54b7ae6955ba7367"
+            ]
+        ]
+    },
+    {
+        "id": "db2b0781b6c24e26",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-function-gps-c2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "ceb2241c289562cd",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-tracks",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "54b7ae6955ba7367",
+        "type": "worldmap-tracks",
+        "z": "a80b630b4b43614d",
+        "name": "tracks",
+        "depth": "20",
+        "layer": "combined",
+        "smooth": false,
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "ceb2241c289562cd"
+            ]
+        ]
+    },
+    {
+        "id": "2dfce3b8d0a7cbed",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-avg-heart-rate",
+        "links": [
+            "6fb07852b9e315fe",
+            "7cfa16d77188691b",
+            "91de73cdcedeaacf"
+        ],
+        "x": 225,
+        "y": 380,
+        "wires": [
+            [
+                "7ef72dedf1a06f44"
+            ]
+        ]
+    },
+    {
+        "id": "7ef72dedf1a06f44",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-avg-heart-rate",
+        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 380,
+        "wires": [
+            [
+                "2b60cd532b9bd871",
+                "679f1795bb872a06",
+                "6907476c46abd426"
+            ]
+        ]
+    },
+    {
+        "id": "2b60cd532b9bd871",
+        "type": "ui_artlessgauge2",
+        "z": "a80b630b4b43614d",
+        "group": "0c4edd0bdb18386e",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-avg-heart-rate",
+        "icon": "",
+        "label": "Average Heart-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 110,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 160,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 640,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "679f1795bb872a06",
+        "type": "ui_chart",
+        "z": "a80b630b4b43614d",
+        "name": "chart-avg-heart-rate",
+        "group": "0c4edd0bdb18386e",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Average Heart-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "15",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6907476c46abd426",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-avg-heart-rate",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "9baa9f6a2db5455d",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-avg-breath-rate",
+        "links": [
+            "536297d9bfb29c17",
+            "63ba3a5c630d0d64"
+        ],
+        "x": 225,
+        "y": 560,
+        "wires": [
+            [
+                "2225625156a77d98"
+            ]
+        ]
+    },
+    {
+        "id": "2225625156a77d98",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-avg-breath-rate",
+        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "85e30e57ee0e16a5",
+                "2f2db6699c2549e6",
+                "39a4c9214a6d9942"
+            ]
+        ]
+    },
+    {
+        "id": "85e30e57ee0e16a5",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-avg-breath-rate",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2f2db6699c2549e6",
+        "type": "ui_artlessgauge2",
+        "z": "a80b630b4b43614d",
+        "group": "0c4edd0bdb18386e",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-avg-breath-rate",
+        "icon": "",
+        "label": "Average Breath-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 640,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "39a4c9214a6d9942",
+        "type": "ui_chart",
+        "z": "a80b630b4b43614d",
+        "name": "chart-avg-breath-rate",
+        "group": "0c4edd0bdb18386e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Average Breath-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#dc8add",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 640,
+        "wires": [
+            []
+        ]
     }
 ]
