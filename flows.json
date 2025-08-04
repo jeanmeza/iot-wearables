@@ -2937,6 +2937,7 @@
         "id": "d75477a8dd5f6f69",
         "type": "ui_chart",
         "z": "dbf6846c835accaf",
+        "d": true,
         "name": "chart-respiration-c3",
         "group": "fb5836fdc77fe91d",
         "order": 4,
@@ -2946,14 +2947,14 @@
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
-        "interpolate": "step",
+        "interpolate": "linear",
         "nodata": "",
         "dot": true,
         "ymin": "",
         "ymax": "",
-        "removeOlder": "15",
+        "removeOlder": "10",
         "removeOlderPoints": "",
-        "removeOlderUnit": "60",
+        "removeOlderUnit": "1",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -3031,7 +3032,7 @@
         "order": 6,
         "width": 0,
         "height": 0,
-        "name": "",
+        "name": "gauge-intensity-c3",
         "icon": "",
         "label": "Intensity",
         "unit": "",
@@ -3061,12 +3062,6 @@
                 "dot": 0
             },
             {
-                "val": 5,
-                "col": "#f66151",
-                "t": "max",
-                "dot": 0
-            },
-            {
                 "val": 1.5,
                 "col": "#8ff0a4",
                 "t": "sec",
@@ -3083,12 +3078,18 @@
                 "col": "#f66151",
                 "t": "sec",
                 "dot": 0
+            },
+            {
+                "val": 5,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
             }
         ],
         "lineWidth": 3,
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 1020,
+        "x": 1030,
         "y": 700,
         "wires": []
     },
