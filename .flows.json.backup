@@ -16,6 +16,14 @@
         "env": []
     },
     {
+        "id": "dbf6846c835accaf",
+        "type": "tab",
+        "label": "Cyclist 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "a80b630b4b43614d",
         "type": "tab",
         "label": "Team",
@@ -121,44 +129,6 @@
         }
     },
     {
-        "id": "cf2cf577a28d9373",
-        "type": "ui_tab",
-        "name": "Sub",
-        "icon": "dashboard",
-        "order": 2,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "f2e47570d7e3d99e",
-        "type": "ui_group",
-        "name": "Home",
-        "tab": "cf2cf577a28d9373",
-        "order": 1,
-        "disp": true,
-        "width": 6,
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "fab7eefd92b5097f",
-        "type": "ui_tab",
-        "name": "Cyclist Dashboard",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "09ab234bed2ce55f",
-        "type": "ui_tab",
-        "name": "Map",
-        "icon": "dashboard",
-        "order": 3,
-        "disabled": false,
-        "hidden": false
-    },
-    {
         "id": "09e14cb17101e31e",
         "type": "ui_tab",
         "name": "Vitals",
@@ -244,7 +214,29 @@
         "name": "Team",
         "tab": "feaeb291767880fa",
         "order": 1,
+        "disp": false,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fb5836fdc77fe91d",
+        "type": "ui_group",
+        "name": "Cyclist 3 Vitals",
+        "tab": "09e14cb17101e31e",
+        "order": 3,
         "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0c4edd0bdb18386e",
+        "type": "ui_group",
+        "name": "Team's Vitals",
+        "tab": "feaeb291767880fa",
+        "order": 2,
+        "disp": false,
         "width": 6,
         "collapse": false,
         "className": ""
@@ -262,8 +254,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 790,
-        "y": 100,
+        "x": 770,
+        "y": 80,
         "wires": []
     },
     {
@@ -348,7 +340,8 @@
                 "b0d330a56d92b095",
                 "1462cc644e7a8637",
                 "e452c6a1dc7e8435",
-                "22a064db95cca791"
+                "22a064db95cca791",
+                "91de73cdcedeaacf"
             ]
         ]
     },
@@ -458,13 +451,13 @@
         "id": "52184ced46f6cdd0",
         "type": "change",
         "z": "49ef9935a0084879",
-        "name": "change-breathing-rate-c1",
+        "name": "change-breath-rate-c1",
         "rules": [
             {
                 "t": "set",
                 "p": "payload",
                 "pt": "msg",
-                "to": "payload.breathingRate",
+                "to": "payload.breathRate",
                 "tot": "msg"
             }
         ],
@@ -473,12 +466,13 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 770,
+        "x": 760,
         "y": 880,
         "wires": [
             [
                 "7a561cec02a71d51",
-                "aa32617a3f2ee30a"
+                "aa32617a3f2ee30a",
+                "63ba3a5c630d0d64"
             ]
         ]
     },
@@ -489,7 +483,7 @@
         "d": true,
         "group": "c9285b115cb483f1",
         "name": "customized-heart-rate",
-        "order": 7,
+        "order": 11,
         "width": 0,
         "height": 0,
         "format": "<div id=\"heartRateGaugeContainer\"></div>\n\n<script>\n  (function(scope) {\n    const config = {\n      containerId: 'heartRateGaugeContainer',\n      labels: ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Maximum'],\n      data: [60, 70, 130, 150],\n      colors: ['#FF0000', '#FFFF00', '#00FF00', '#FF0000'],\n      title: 'Heart Rate (bpm)',\n      pointerColor: 'black',\n      units: ' bpm',\n      min: 0, \n      max: 190 \n    };\n\n    const heartRateGauge = new MulticolorGauge(config, scope);\n\n    scope.$watch('msg.payload', function(heartRate) {\n      if (typeof heartRate === 'number') {\n        heartRateGauge.update(heartRate);\n      }\n    });\n  })(scope);\n</script>",
@@ -532,7 +526,7 @@
         "z": "49ef9935a0084879",
         "name": "chart-heart-rate-c1",
         "group": "c9285b115cb483f1",
-        "order": 11,
+        "order": 5,
         "width": 0,
         "height": 0,
         "label": "Hear-rate",
@@ -544,9 +538,9 @@
         "dot": false,
         "ymin": "0",
         "ymax": "200",
-        "removeOlder": "1",
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -575,7 +569,7 @@
         "type": "ui_artlessgauge2",
         "z": "49ef9935a0084879",
         "group": "c9285b115cb483f1",
-        "order": 11,
+        "order": 6,
         "width": 0,
         "height": 0,
         "name": "gauge-heart-rate-c1",
@@ -644,7 +638,7 @@
         "type": "ui_artlessgauge2",
         "z": "49ef9935a0084879",
         "group": "c9285b115cb483f1",
-        "order": 12,
+        "order": 7,
         "width": 0,
         "height": 0,
         "name": "gauge-speed-c1",
@@ -714,7 +708,7 @@
         "z": "49ef9935a0084879",
         "name": "chart-speed-c1",
         "group": "c9285b115cb483f1",
-        "order": 13,
+        "order": 1,
         "width": 0,
         "height": 0,
         "label": "Speed",
@@ -726,9 +720,9 @@
         "dot": false,
         "ymin": "0",
         "ymax": "70",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -758,7 +752,7 @@
         "z": "49ef9935a0084879",
         "name": "chart-cadence-c1",
         "group": "c9285b115cb483f1",
-        "order": 14,
+        "order": 2,
         "width": 0,
         "height": 0,
         "label": "Cadence",
@@ -770,9 +764,9 @@
         "dot": false,
         "ymin": "0",
         "ymax": "200",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -801,7 +795,7 @@
         "type": "ui_artlessgauge2",
         "z": "49ef9935a0084879",
         "group": "c9285b115cb483f1",
-        "order": 15,
+        "order": 8,
         "width": 0,
         "height": 0,
         "name": "gauge-cadence-c1",
@@ -870,7 +864,7 @@
         "type": "ui_artlessgauge2",
         "z": "49ef9935a0084879",
         "group": "c9285b115cb483f1",
-        "order": 16,
+        "order": 9,
         "width": 0,
         "height": 0,
         "name": "gauge-gear-ratio-c1",
@@ -939,7 +933,7 @@
         "type": "ui_artlessgauge2",
         "z": "49ef9935a0084879",
         "group": "c9285b115cb483f1",
-        "order": 19,
+        "order": 10,
         "width": 0,
         "height": 0,
         "name": "gauge-breath-rate-c1",
@@ -1009,7 +1003,7 @@
         "z": "49ef9935a0084879",
         "name": "chart-gear-ratio-c1",
         "group": "c9285b115cb483f1",
-        "order": 17,
+        "order": 3,
         "width": 0,
         "height": 0,
         "label": "Gear-ratio",
@@ -1021,9 +1015,9 @@
         "dot": false,
         "ymin": "0",
         "ymax": "6",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -1053,7 +1047,7 @@
         "z": "49ef9935a0084879",
         "name": "chart-breath-rate-c1",
         "group": "c9285b115cb483f1",
-        "order": 18,
+        "order": 4,
         "width": 0,
         "height": 0,
         "label": "Breath-rate",
@@ -1063,11 +1057,11 @@
         "interpolate": "linear",
         "nodata": "",
         "dot": false,
-        "ymin": "0",
-        "ymax": "80",
-        "removeOlder": 1,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -1098,7 +1092,7 @@
         "d": true,
         "name": "classic-gauge-heart-rate",
         "group": "c9285b115cb483f1",
-        "order": 0,
+        "order": 12,
         "width": 0,
         "height": 0,
         "gtype": "gage",
@@ -1143,20 +1137,276 @@
         ]
     },
     {
-        "id": "a401dc2d76dac31a",
-        "type": "mqtt in JSON",
+        "id": "992e2d03c07c8f28",
+        "type": "mqtt in",
         "z": "49ef9935a0084879",
-        "name": "mqtt-heartbeat-rate-json",
-        "topic": "sensor/health",
+        "name": "mqtt-breath-rate",
+        "topic": "sensor/breath-rate",
         "qos": "2",
+        "datatype": "auto-detect",
         "broker": "bc626649c953509f",
-        "ignoreempty": true,
-        "removemqttconfig": false,
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
         "x": 480,
-        "y": 120,
+        "y": 860,
         "wires": [
-            []
+            [
+                "52184ced46f6cdd0",
+                "49c087bbd431402c"
+            ]
         ]
+    },
+    {
+        "id": "49c087bbd431402c",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debugbreath-rate-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "eec52b574c19a723",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-speed",
+        "topic": "sensor/speed",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 420,
+        "wires": [
+            [
+                "e4b73ed3cf9b77c5",
+                "abef59fa5f2f1696"
+            ]
+        ]
+    },
+    {
+        "id": "abef59fa5f2f1696",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-speed-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "bb79f2e83656aabb",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-cadence",
+        "topic": "sensor/cadence",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 470,
+        "y": 560,
+        "wires": [
+            [
+                "fe3df14342df3d14",
+                "5b63754e9d5412c9"
+            ]
+        ]
+    },
+    {
+        "id": "fe3df14342df3d14",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-cadence-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "45863af7155bcd1f",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-gear-ratio",
+        "topic": "sensor/gear-ratio",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 760,
+        "wires": [
+            [
+                "c1e7ebbe5b022198",
+                "e56e5af83d41509c"
+            ]
+        ]
+    },
+    {
+        "id": "e56e5af83d41509c",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-gear-ratio-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "c48f81f36ad9e132",
+        "type": "mqtt in",
+        "z": "49ef9935a0084879",
+        "name": "mqtt-gps",
+        "topic": "sensor/gps",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 1040,
+        "wires": [
+            [
+                "ae28a2bb56704cb6",
+                "a22996989185edb0"
+            ]
+        ]
+    },
+    {
+        "id": "ae28a2bb56704cb6",
+        "type": "function",
+        "z": "49ef9935a0084879",
+        "name": "function-gps-c1",
+        "func": "const gps = msg.payload.gps;\n\nconst dataPoint = {\n  gps: {\n    latitude: gps.latitude,\n    longitude: gps.longitude\n  },\n  id: \"c1\"\n};\n\nmsg.payload = dataPoint;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 1040,
+        "wires": [
+            [
+                "3d18fc3a9ef0aa8c",
+                "aaf7d0b78c0ba4d8"
+            ]
+        ]
+    },
+    {
+        "id": "3d18fc3a9ef0aa8c",
+        "type": "link out",
+        "z": "49ef9935a0084879",
+        "name": "link-out-gps-c1-map",
+        "mode": "link",
+        "links": [
+            "e8bd8f310b3aa2e8"
+        ],
+        "x": 785,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "a22996989185edb0",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-mqtt-gps",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "aaf7d0b78c0ba4d8",
+        "type": "debug",
+        "z": "49ef9935a0084879",
+        "name": "debug-function-gps-c1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "91de73cdcedeaacf",
+        "type": "link out",
+        "z": "49ef9935a0084879",
+        "name": "link-out-heart-rate-c1",
+        "mode": "link",
+        "links": [
+            "2dfce3b8d0a7cbed"
+        ],
+        "x": 955,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "63ba3a5c630d0d64",
+        "type": "link out",
+        "z": "49ef9935a0084879",
+        "name": "link-out-breath-rate-c1",
+        "mode": "link",
+        "links": [
+            "9baa9f6a2db5455d"
+        ],
+        "x": 935,
+        "y": 980,
+        "wires": []
     },
     {
         "id": "fae7ec1bee79ab61",
@@ -1226,7 +1476,8 @@
             [
                 "24eb7f263c2fdbe3",
                 "0886af86e56a0347",
-                "124b960563e8f2c6"
+                "124b960563e8f2c6",
+                "7cfa16d77188691b"
             ]
         ]
     },
@@ -1338,7 +1589,7 @@
         "id": "622b72df693d5b84",
         "type": "change",
         "z": "ddbfc14646ad5a06",
-        "name": "change-breathing-rate-c2",
+        "name": "change-breath-rate-c2",
         "rules": [
             {
                 "t": "set",
@@ -1353,13 +1604,14 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 690,
+        "x": 680,
         "y": 900,
         "wires": [
             [
                 "fcd141fc912448ed",
                 "70eeb2dd7e485987",
-                "31571967c0263764"
+                "31571967c0263764",
+                "536297d9bfb29c17"
             ]
         ]
     },
@@ -1768,7 +2020,8 @@
                 "860853d82f4d3f08",
                 "444849ed44d02f40",
                 "6380043ff06a7a99",
-                "622b72df693d5b84"
+                "622b72df693d5b84",
+                "e9b68dfa0cb82589"
             ]
         ]
     },
@@ -1858,9 +2111,9 @@
         "dot": false,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -1902,9 +2155,9 @@
         "dot": false,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -1946,9 +2199,9 @@
         "dot": false,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -1990,9 +2243,9 @@
         "dot": false,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -2025,7 +2278,7 @@
         "order": 9,
         "width": 0,
         "height": 0,
-        "label": "Breathing-rate",
+        "label": "Breath-rate",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -2034,9 +2287,9 @@
         "dot": false,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "15",
         "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
+        "removeOlderUnit": "60",
         "cutout": 0,
         "useOneColor": false,
         "useUTC": false,
@@ -2061,39 +2314,1266 @@
         ]
     },
     {
+        "id": "e9b68dfa0cb82589",
+        "type": "change",
+        "z": "ddbfc14646ad5a06",
+        "name": "change-gps-c2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.gps",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 1120,
+        "wires": [
+            [
+                "98f8054e2779a0d8",
+                "4d16a46eebde3b84"
+            ]
+        ]
+    },
+    {
+        "id": "98f8054e2779a0d8",
+        "type": "function",
+        "z": "ddbfc14646ad5a06",
+        "name": "function-gps-c2",
+        "func": "const gps = msg.payload;\n\nconst dataPoint = {\n  gps: {\n    latitude: gps.latitude,\n    longitude: gps.longitude\n  },\n  id: \"c2\"\n};\n\nmsg.payload = dataPoint;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 1120,
+        "wires": [
+            [
+                "62e94c03fc51cd20",
+                "ee15fdad18eb20b8"
+            ]
+        ]
+    },
+    {
+        "id": "62e94c03fc51cd20",
+        "type": "link out",
+        "z": "ddbfc14646ad5a06",
+        "name": "link-out-gps-c2-map",
+        "mode": "link",
+        "links": [
+            "e8bd8f310b3aa2e8"
+        ],
+        "x": 985,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "ee15fdad18eb20b8",
+        "type": "debug",
+        "z": "ddbfc14646ad5a06",
+        "name": "debug-function-gps",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "4d16a46eebde3b84",
+        "type": "debug",
+        "z": "ddbfc14646ad5a06",
+        "name": "debug-change-gps",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "7cfa16d77188691b",
+        "type": "link out",
+        "z": "ddbfc14646ad5a06",
+        "name": "link-out-heart-rate-c2",
+        "mode": "link",
+        "links": [
+            "2dfce3b8d0a7cbed"
+        ],
+        "x": 875,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "536297d9bfb29c17",
+        "type": "link out",
+        "z": "ddbfc14646ad5a06",
+        "name": "link-out-breath-rate-c2",
+        "mode": "link",
+        "links": [
+            "9baa9f6a2db5455d"
+        ],
+        "x": 855,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "3008db5d97d439b3",
+        "type": "mqtt in",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-heart-rate-c3",
+        "topic": "sensor/howdy/data",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "bc626649c953509f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 180,
+        "wires": [
+            [
+                "051aca047e86821d",
+                "895f4e313c139574",
+                "f46171a97f493b65",
+                "8815f68dd1081f2f",
+                "0fc5c047f9537c5d",
+                "2db025ba0b9c11b9"
+            ]
+        ]
+    },
+    {
+        "id": "09facc7e96912cb7",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "debug-heart-rate-c3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "c8e2e5dd198c5359",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-heart-rate-c3",
+        "icon": "",
+        "label": "Heart-rate",
+        "unit": "bpm",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 100,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 160,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 780,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "56e3f62f5b16638f",
+        "type": "ui_chart",
+        "z": "dbf6846c835accaf",
+        "name": "chart-heart-rate-c3",
+        "group": "fb5836fdc77fe91d",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Heart-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "15",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 770,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "051aca047e86821d",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "debug-mqtt-heart-rate-c3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "895f4e313c139574",
+        "type": "function",
+        "z": "dbf6846c835accaf",
+        "name": "function-heart-rate-c3",
+        "func": "if (msg.payload.measureType === \"HeartRate\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 180,
+        "wires": [
+            [
+                "09facc7e96912cb7",
+                "c8e2e5dd198c5359",
+                "56e3f62f5b16638f",
+                "6fb07852b9e315fe"
+            ]
+        ]
+    },
+    {
+        "id": "f46171a97f493b65",
+        "type": "function",
+        "z": "dbf6846c835accaf",
+        "name": "function-breath-rate-c3",
+        "func": "if (msg.payload.measureType === \"BreathFrequency\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 320,
+        "wires": [
+            [
+                "6361da7b0cfc85d6",
+                "9f875ef5685a14e4",
+                "e1f2405528005fe9",
+                "28f1ee3225dcbdbf"
+            ]
+        ]
+    },
+    {
+        "id": "6361da7b0cfc85d6",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "debug-breath-rate-c3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "8815f68dd1081f2f",
+        "type": "function",
+        "z": "dbf6846c835accaf",
+        "name": "function-respiration-c3",
+        "func": "if (msg.payload.measureType === \"Respiration\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: 1, // val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 540,
+        "wires": [
+            [
+                "ed4d456bdfee5e86",
+                "d75477a8dd5f6f69",
+                "db6e472bc601395a"
+            ]
+        ]
+    },
+    {
+        "id": "0fc5c047f9537c5d",
+        "type": "function",
+        "z": "dbf6846c835accaf",
+        "name": "function-acceleration-c3",
+        "func": "const id = msg.payload.userId;\nconst type = msg.payload.measureType;\nconst values = msg.payload.value;\nconst timestamp = msg.payload.date;\n\nif (!flow.get(\"accelBuffer\")) flow.set(\"accelBuffer\", {});\nconst buffer = flow.get(\"accelBuffer\");\n\nif (!buffer[id]) buffer[id] = {};\nbuffer[id][type] = values;\nbuffer[id].timestamp = timestamp;\n\nif (\n  buffer[id][\"AccelerationX\"] &&\n  buffer[id][\"AccelerationY\"] &&\n  buffer[id][\"AccelerationZ\"]\n) {\n  const x = buffer[id][\"AccelerationX\"];\n  const y = buffer[id][\"AccelerationY\"];\n  const z = buffer[id][\"AccelerationZ\"];\n\n  const total = x.map((_, i) => {\n    return Math.sqrt(x[i] ** 2 + y[i] ** 2 + z[i] ** 2);\n  });\n\n  let avg = total.reduce((sum, v) => sum + v, 0) / total.length;\n\n  // Custom rounding\n  if (avg < 0.25) {\n    avg = 0;\n  } else if (avg < 0.75) {\n    avg = 0.5;\n  } else if (avg < 1.25) {\n    avg = 1;\n  } else if (avg < 1.75) {\n    avg = 1.5;\n  } else if (avg < 2.25) {\n    avg = 2;\n  } else if (avg < 2.75) {\n    avg = 2.5;\n  } else {\n    avg = 3;\n}\n\n  // Classify average intensity\n  /*let overallIntensity;\n  if (avg < 0.5) overallIntensity = \"idle\";\n  else if (avg < 1.5) overallIntensity = \"low\";\n  else if (avg < 2.5) overallIntensity = \"moderate\";\n  else overallIntensity = \"high\";*/\n\n  msg.payload = {\n    userId: id,\n    timestamp,\n    avgAcceleration: avg,\n    // intensity: overallIntensity\n  };\n\n  // Reset buffer\n  delete buffer[id][\"AccelerationX\"];\n  delete buffer[id][\"AccelerationY\"];\n  delete buffer[id][\"AccelerationZ\"];\n  flow.set(\"accelBuffer\", buffer);\n\n  return msg;\n}\n\nflow.set(\"accelBuffer\", buffer);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 740,
+        "wires": [
+            [
+                "9cc81a19b3975140",
+                "ba4f724e910e762b"
+            ]
+        ]
+    },
+    {
+        "id": "2db025ba0b9c11b9",
+        "type": "function",
+        "z": "dbf6846c835accaf",
+        "d": true,
+        "name": "function-position-c3",
+        "func": "if (msg.payload.measureType === \"Position\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 860,
+        "wires": [
+            [
+                "409191eaba89764a"
+            ]
+        ]
+    },
+    {
+        "id": "ed4d456bdfee5e86",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "debug-resp-c3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "9cc81a19b3975140",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "debug-acc-c3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "409191eaba89764a",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "d": true,
+        "name": "debug-pos-c3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "9f875ef5685a14e4",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-breath-rate-c3",
+        "icon": "",
+        "label": "Breath-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 820,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e1f2405528005fe9",
+        "type": "ui_chart",
+        "z": "dbf6846c835accaf",
+        "name": "chart-breath-rate-c3",
+        "group": "fb5836fdc77fe91d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Breath-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "15",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 820,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d75477a8dd5f6f69",
+        "type": "ui_chart",
+        "z": "dbf6846c835accaf",
+        "d": true,
+        "name": "chart-respiration-c3",
+        "group": "fb5836fdc77fe91d",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Respiration",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "10",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 770,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db6e472bc601395a",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "d": true,
+        "group": "fb5836fdc77fe91d",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-respiration-c3",
+        "icon": "",
+        "label": "Respiration",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#ff9900",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 10,
+                "col": "#ff9900",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 780,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "f216efaf8e033a69",
+        "type": "ui_artlessgauge2",
+        "z": "dbf6846c835accaf",
+        "group": "fb5836fdc77fe91d",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-intensity-c3",
+        "icon": "",
+        "label": "Intensity",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 0.5,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 1.5,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 2.5,
+                "col": "#ffbe6f",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 3,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 5,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 1030,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "ba4f724e910e762b",
+        "type": "change",
+        "z": "dbf6846c835accaf",
+        "name": "change-avgAcceleration-c3",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.avgAcceleration",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 740,
+        "wires": [
+            [
+                "f216efaf8e033a69"
+            ]
+        ]
+    },
+    {
+        "id": "6fb07852b9e315fe",
+        "type": "link out",
+        "z": "dbf6846c835accaf",
+        "name": "link-out-heart-rate-c3",
+        "mode": "link",
+        "links": [
+            "2dfce3b8d0a7cbed"
+        ],
+        "x": 695,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "28f1ee3225dcbdbf",
+        "type": "link out",
+        "z": "dbf6846c835accaf",
+        "name": "link-out-breath-rate-c3",
+        "mode": "link",
+        "links": [],
+        "x": 735,
+        "y": 500,
+        "wires": []
+    },
+    {
         "id": "c101a0cde894d388",
         "type": "ui_worldmap",
         "z": "a80b630b4b43614d",
         "group": "750128c11cd26c80",
         "order": 0,
-        "width": 0,
-        "height": 0,
+        "width": "6",
+        "height": "12",
         "name": "map",
-        "lat": "",
-        "lon": "",
-        "zoom": "",
-        "layer": "OSMG",
+        "lat": "44.403050",
+        "lon": "8.971959",
+        "zoom": "16",
+        "layer": "OSMC",
         "cluster": "",
         "maxage": "",
         "usermenu": "hide",
-        "layers": "hide",
+        "layers": "show",
         "panit": "false",
         "panlock": "false",
         "zoomlock": "false",
         "hiderightclick": "true",
-        "coords": "none",
+        "coords": "deg",
         "showgrid": "false",
         "showruler": "false",
         "allowFileDrop": "false",
         "path": "/worldmap",
-        "overlist": "DR,CO,RA,DN,HM",
-        "maplist": "OSMG,OSMC,EsriC,EsriS,EsriT,EsriDG,UKOS",
+        "overlist": "BU,RW,TL",
+        "maplist": "OSMC,EsriS",
         "mapname": "",
         "mapurl": "",
         "mapopt": "",
         "mapwms": false,
-        "x": 430,
+        "x": 570,
+        "y": 100,
+        "wires": [],
+        "icon": "font-awesome/fa-map-marker"
+    },
+    {
+        "id": "e8bd8f310b3aa2e8",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-gps-c2-map",
+        "links": [
+            "3d18fc3a9ef0aa8c",
+            "62e94c03fc51cd20"
+        ],
+        "x": 235,
+        "y": 160,
+        "wires": [
+            [
+                "726de83bcb560713"
+            ]
+        ]
+    },
+    {
+        "id": "726de83bcb560713",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-gps",
+        "func": "const id = msg.payload.id;\nconst gps = msg.payload.gps;\n\nmsg.payload = {\n  name: id,\n  lat: gps.latitude,\n  lon: gps.longitude,\n  icon: \"fa-bicycle\",\n  // layer: `cyclist-${id}`,\n  layer: \"cyclists\",\n  popup: `ID: ${id}`,\n  trackpoints: 20,\n  color: \"blue\",\n  weight: 2,\n  opacity: 0.9\n};\n\nmsg.topic = id;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 160,
+        "wires": [
+            [
+                "db2b0781b6c24e26",
+                "c101a0cde894d388",
+                "54b7ae6955ba7367"
+            ]
+        ]
+    },
+    {
+        "id": "db2b0781b6c24e26",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-function-gps-c2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "ceb2241c289562cd",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-tracks",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
         "y": 160,
         "wires": []
+    },
+    {
+        "id": "54b7ae6955ba7367",
+        "type": "worldmap-tracks",
+        "z": "a80b630b4b43614d",
+        "name": "tracks",
+        "depth": "20",
+        "layer": "combined",
+        "smooth": false,
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "ceb2241c289562cd"
+            ]
+        ]
+    },
+    {
+        "id": "2dfce3b8d0a7cbed",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-avg-heart-rate",
+        "links": [
+            "6fb07852b9e315fe",
+            "7cfa16d77188691b",
+            "91de73cdcedeaacf"
+        ],
+        "x": 225,
+        "y": 380,
+        "wires": [
+            [
+                "7ef72dedf1a06f44"
+            ]
+        ]
+    },
+    {
+        "id": "7ef72dedf1a06f44",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-avg-heart-rate",
+        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 380,
+        "wires": [
+            [
+                "2b60cd532b9bd871",
+                "679f1795bb872a06",
+                "6907476c46abd426"
+            ]
+        ]
+    },
+    {
+        "id": "2b60cd532b9bd871",
+        "type": "ui_artlessgauge2",
+        "z": "a80b630b4b43614d",
+        "group": "0c4edd0bdb18386e",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-avg-heart-rate",
+        "icon": "",
+        "label": "Average Heart-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 50,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 60,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 110,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 160,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 200,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": 3,
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 640,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "679f1795bb872a06",
+        "type": "ui_chart",
+        "z": "a80b630b4b43614d",
+        "name": "chart-avg-heart-rate",
+        "group": "0c4edd0bdb18386e",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Average Heart-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "15",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6907476c46abd426",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-avg-heart-rate",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "9baa9f6a2db5455d",
+        "type": "link in",
+        "z": "a80b630b4b43614d",
+        "name": "link-in-avg-breath-rate",
+        "links": [
+            "536297d9bfb29c17",
+            "63ba3a5c630d0d64"
+        ],
+        "x": 225,
+        "y": 560,
+        "wires": [
+            [
+                "2225625156a77d98"
+            ]
+        ]
+    },
+    {
+        "id": "2225625156a77d98",
+        "type": "function",
+        "z": "a80b630b4b43614d",
+        "name": "function-avg-breath-rate",
+        "func": "let buffer = flow.get(\"buffer\") || [];\n\nbuffer.push(msg.payload);\n\nif (buffer.length >= 5) {\n    const avg = buffer.reduce((sum, val) => sum + val, 0) / buffer.length;\n    flow.set(\"buffer\", []); // reset buffer\n    return { payload: avg };\n} else {\n    flow.set(\"buffer\", buffer);\n    return null; // wait until buffer is full\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "85e30e57ee0e16a5",
+                "2f2db6699c2549e6",
+                "39a4c9214a6d9942"
+            ]
+        ]
+    },
+    {
+        "id": "85e30e57ee0e16a5",
+        "type": "debug",
+        "z": "a80b630b4b43614d",
+        "name": "debug-avg-breath-rate",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2f2db6699c2549e6",
+        "type": "ui_artlessgauge2",
+        "z": "a80b630b4b43614d",
+        "group": "0c4edd0bdb18386e",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "gauge-avg-breath-rate",
+        "icon": "",
+        "label": "Average Breath-rate",
+        "unit": "",
+        "layout": "linear",
+        "decimals": 0,
+        "differential": false,
+        "minmax": false,
+        "colorTrack": "#555555",
+        "style": "",
+        "colorFromTheme": true,
+        "property": "payload",
+        "secondary": "secondary",
+        "inline": false,
+        "animate": true,
+        "log2": false,
+        "sectors": [
+            {
+                "val": 0,
+                "col": "#f66151",
+                "t": "min",
+                "dot": 0
+            },
+            {
+                "val": 12,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 20,
+                "col": "#8ff0a4",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 35,
+                "col": "#f9f06b",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 45,
+                "col": "#f66151",
+                "t": "sec",
+                "dot": 0
+            },
+            {
+                "val": 80,
+                "col": "#f66151",
+                "t": "max",
+                "dot": 0
+            }
+        ],
+        "lineWidth": "5",
+        "bgcolorFromTheme": true,
+        "diffCenter": "",
+        "x": 640,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "39a4c9214a6d9942",
+        "type": "ui_chart",
+        "z": "a80b630b4b43614d",
+        "name": "chart-avg-breath-rate",
+        "group": "0c4edd0bdb18386e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Average Breath-rate",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#dc8add",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 640,
+        "y": 640,
+        "wires": [
+            []
+        ]
     }
 ]

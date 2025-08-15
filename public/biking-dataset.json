@@ -1,6 +1,9 @@
 [
   {
-    "gps": { "latitude": 45.000000, "longitude": 7.000000 },
+    "gps": {
+      "latitude": 44.4032861,
+      "longitude": 8.9721727
+    },
     "speed": 0.0,
     "cadence": 0,
     "gearRatio": 2.0,
@@ -9,7 +12,10 @@
     "stressLevel": 5
   },
   {
-    "gps": { "latitude": 45.000946, "longitude": 7.001338 },
+    "gps": {
+      "latitude": 44.4033759311175,
+      "longitude": 8.9721727
+    },
     "speed": 9.0,
     "cadence": 38,
     "gearRatio": 2.25,
@@ -18,7 +24,10 @@
     "stressLevel": 8
   },
   {
-    "gps": { "latitude": 45.002838, "longitude": 7.004013 },
+    "gps": {
+      "latitude": 44.403465762235,
+      "longitude": 8.9721727
+    },
     "speed": 18.0,
     "cadence": 75,
     "gearRatio": 2.5,
@@ -27,7 +36,10 @@
     "stressLevel": 10
   },
   {
-    "gps": { "latitude": 45.004870, "longitude": 7.006887 },
+    "gps": {
+      "latitude": 44.4035555933525,
+      "longitude": 8.9721727
+    },
     "speed": 19.3,
     "cadence": 78,
     "gearRatio": 2.67,
@@ -36,7 +48,10 @@
     "stressLevel": 12
   },
   {
-    "gps": { "latitude": 45.007042, "longitude": 7.009959 },
+    "gps": {
+      "latitude": 44.40364542447,
+      "longitude": 8.9721727
+    },
     "speed": 20.7,
     "cadence": 82,
     "gearRatio": 2.83,
@@ -45,7 +60,10 @@
     "stressLevel": 15
   },
   {
-    "gps": { "latitude": 45.009354, "longitude": 7.013230 },
+    "gps": {
+      "latitude": 44.4037352555875,
+      "longitude": 8.9721727
+    },
     "speed": 22.0,
     "cadence": 85,
     "gearRatio": 3.0,
@@ -54,7 +72,10 @@
     "stressLevel": 18
   },
   {
-    "gps": { "latitude": 45.011421, "longitude": 7.016154 },
+    "gps": {
+      "latitude": 44.403825086705,
+      "longitude": 8.9721727
+    },
     "speed": 19.7,
     "cadence": 80,
     "gearRatio": 2.6,
@@ -63,7 +84,10 @@
     "stressLevel": 37
   },
   {
-    "gps": { "latitude": 45.013243, "longitude": 7.018731 },
+    "gps": {
+      "latitude": 44.4039149178225,
+      "longitude": 8.9721727
+    },
     "speed": 17.3,
     "cadence": 75,
     "gearRatio": 2.2,
@@ -72,7 +96,10 @@
     "stressLevel": 58
   },
   {
-    "gps": { "latitude": 45.014820, "longitude": 7.020961 },
+    "gps": {
+      "latitude": 44.40400474894,
+      "longitude": 8.9721727
+    },
     "speed": 15.0,
     "cadence": 70,
     "gearRatio": 1.8,
@@ -81,7 +108,10 @@
     "stressLevel": 80
   },
   {
-    "gps": { "latitude": 45.012543, "longitude": 7.022341 },
+    "gps": {
+      "latitude": 44.404094580057496,
+      "longitude": 8.9721727
+    },
     "speed": 21.7,
     "cadence": 67,
     "gearRatio": 2.53,
@@ -90,7 +120,10 @@
     "stressLevel": 70
   },
   {
-    "gps": { "latitude": 45.009565, "longitude": 7.024147 },
+    "gps": {
+      "latitude": 44.404184411174995,
+      "longitude": 8.9721727
+    },
     "speed": 28.3,
     "cadence": 63,
     "gearRatio": 3.27,
@@ -99,7 +132,10 @@
     "stressLevel": 60
   },
   {
-    "gps": { "latitude": 45.005886, "longitude": 7.026377 },
+    "gps": {
+      "latitude": 44.404274242292495,
+      "longitude": 8.9721727
+    },
     "speed": 35.0,
     "cadence": 60,
     "gearRatio": 4.0,
@@ -108,7 +144,10 @@
     "stressLevel": 50
   },
   {
-    "gps": { "latitude": 45.002995, "longitude": 7.028129 },
+    "gps": {
+      "latitude": 44.404364073409994,
+      "longitude": 8.9721727
+    },
     "speed": 27.5,
     "cadence": 58,
     "gearRatio": 3.5,
@@ -117,7 +156,10 @@
     "stressLevel": 40
   },
   {
-    "gps": { "latitude": 45.000893, "longitude": 7.029403 },
+    "gps": {
+      "latitude": 44.40445390452749,
+      "longitude": 8.9721727
+    },
     "speed": 20.0,
     "cadence": 55,
     "gearRatio": 3.0,
@@ -126,7 +168,10 @@
     "stressLevel": 30
   },
   {
-    "gps": { "latitude": 44.999580, "longitude": 7.030199 },
+    "gps": {
+      "latitude": 44.40454373564499,
+      "longitude": 8.9721727
+    },
     "speed": 12.5,
     "cadence": 52,
     "gearRatio": 2.5,
@@ -135,7 +180,10 @@
     "stressLevel": 20
   },
   {
-    "gps": { "latitude": 44.999054, "longitude": 7.030518 },
+    "gps": {
+      "latitude": 44.40463356676249,
+      "longitude": 8.9721727
+    },
     "speed": 5.0,
     "cadence": 50,
     "gearRatio": 2.0,
@@ -144,7 +192,10 @@
     "stressLevel": 10
   },
   {
-    "gps": { "latitude": 44.998111, "longitude": 7.030618 },
+    "gps": {
+      "latitude": 44.40472339787999,
+      "longitude": 8.9721727
+    },
     "speed": 2.0,
     "cadence": 48,
     "gearRatio": 1.0,
