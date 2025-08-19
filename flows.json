@@ -2658,7 +2658,8 @@
                 "09facc7e96912cb7",
                 "c8e2e5dd198c5359",
                 "56e3f62f5b16638f",
-                "6fb07852b9e315fe"
+                "6fb07852b9e315fe",
+                "72eb904909563919"
             ]
         ]
     },
@@ -2681,7 +2682,8 @@
                 "6361da7b0cfc85d6",
                 "9f875ef5685a14e4",
                 "e1f2405528005fe9",
-                "28f1ee3225dcbdbf"
+                "28f1ee3225dcbdbf",
+                "5393b3de93aa4cec"
             ]
         ]
     },
@@ -2715,12 +2717,13 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 540,
+        "y": 580,
         "wires": [
             [
                 "ed4d456bdfee5e86",
                 "d75477a8dd5f6f69",
-                "db6e472bc601395a"
+                "db6e472bc601395a",
+                "a00dbac8ff3c3211"
             ]
         ]
     },
@@ -2737,11 +2740,12 @@
         "finalize": "",
         "libs": [],
         "x": 530,
-        "y": 740,
+        "y": 800,
         "wires": [
             [
                 "9cc81a19b3975140",
-                "ba4f724e910e762b"
+                "ba4f724e910e762b",
+                "c095172a5d79840c"
             ]
         ]
     },
@@ -2759,7 +2763,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 860,
+        "y": 960,
         "wires": [
             [
                 "409191eaba89764a"
@@ -2780,7 +2784,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 760,
-        "y": 540,
+        "y": 580,
         "wires": []
     },
     {
@@ -2797,7 +2801,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 760,
-        "y": 800,
+        "y": 900,
         "wires": []
     },
     {
@@ -2815,7 +2819,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 860,
+        "y": 960,
         "wires": []
     },
     {
@@ -2971,7 +2975,7 @@
         "useDifferentColor": false,
         "className": "",
         "x": 770,
-        "y": 660,
+        "y": 700,
         "wires": [
             []
         ]
@@ -3019,7 +3023,7 @@
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 780,
-        "y": 600,
+        "y": 640,
         "wires": []
     },
     {
@@ -3088,7 +3092,7 @@
         "bgcolorFromTheme": true,
         "diffCenter": "",
         "x": 1030,
-        "y": 740,
+        "y": 800,
         "wires": []
     },
     {
@@ -3111,7 +3115,7 @@
         "to": "",
         "reg": false,
         "x": 800,
-        "y": 740,
+        "y": 800,
         "wires": [
             [
                 "f216efaf8e033a69"
@@ -3139,7 +3143,79 @@
         "mode": "link",
         "links": [],
         "x": 735,
-        "y": 500,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "72eb904909563919",
+        "type": "mqtt out",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-out-heartbeat-c3",
+        "topic": "sensor/howdy/heartbeat",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d8df27e1727521fa",
+        "x": 780,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "5393b3de93aa4cec",
+        "type": "mqtt out",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-out-breathrate-c3",
+        "topic": "sensor/howdy/breathrate",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d8df27e1727521fa",
+        "x": 820,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "a00dbac8ff3c3211",
+        "type": "mqtt out",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-out-respiration-c3",
+        "topic": "sensor/howdy/respiration",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "d8df27e1727521fa",
+        "x": 760,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "c095172a5d79840c",
+        "type": "mqtt out",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-out-acc-c3",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bc626649c953509f",
+        "x": 780,
+        "y": 860,
         "wires": []
     },
     {
