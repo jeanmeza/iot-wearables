@@ -195,7 +195,7 @@
         "env": [
             {
                 "name": "HOME",
-                "value": "/home/sahar",
+                "value": "C:\\Users\\mezaj\\",
                 "type": "str"
             }
         ]
@@ -2470,17 +2470,17 @@
         "id": "3008db5d97d439b3",
         "type": "mqtt in",
         "z": "dbf6846c835accaf",
-        "name": "mqtt-heart-rate-c3",
+        "name": "mqtt-in",
         "topic": "sensor/howdy/data",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "d8df27e1727521fa",
+        "broker": "bc626649c953509f",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 270,
-        "y": 180,
+        "x": 110,
+        "y": 340,
         "wires": [
             [
                 "051aca047e86821d",
@@ -2497,7 +2497,7 @@
         "type": "debug",
         "z": "dbf6846c835accaf",
         "name": "debug-heart-rate-c3",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2505,8 +2505,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 780,
-        "y": 140,
+        "x": 760,
+        "y": 20,
         "wires": []
     },
     {
@@ -2574,8 +2574,8 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 780,
-        "y": 200,
+        "x": 1000,
+        "y": 80,
         "wires": []
     },
     {
@@ -2616,8 +2616,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 770,
-        "y": 260,
+        "x": 990,
+        "y": 120,
         "wires": [
             []
         ]
@@ -2626,8 +2626,8 @@
         "id": "051aca047e86821d",
         "type": "debug",
         "z": "dbf6846c835accaf",
-        "name": "debug-mqtt-heart-rate-c3",
-        "active": false,
+        "name": "debug-msg",
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2635,8 +2635,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 510,
-        "y": 80,
+        "x": 410,
+        "y": 20,
         "wires": []
     },
     {
@@ -2644,22 +2644,21 @@
         "type": "function",
         "z": "dbf6846c835accaf",
         "name": "function-heart-rate-c3",
-        "func": "if (msg.payload.measureType === \"HeartRate\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "func": "if (msg.payload.measureType === \"HeartRate\") {\n    const values = msg.payload.value;\n    if (values.length === 0) {\n        return null;\n    }\n    const sum = values.reduce((acc, v) => (v + acc), 0);\n    const userId = msg.payload.userId;\n    return {\n        payload: {\n            userId,\n            timestamp: msg.payload.date,\n            heartRate: sum / values.length,\n        },\n    };\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 180,
+        "x": 440,
+        "y": 80,
         "wires": [
             [
                 "09facc7e96912cb7",
-                "c8e2e5dd198c5359",
-                "56e3f62f5b16638f",
                 "6fb07852b9e315fe",
-                "72eb904909563919"
+                "848f11aad43244b3",
+                "ba687771d2768da2"
             ]
         ]
     },
@@ -2668,22 +2667,21 @@
         "type": "function",
         "z": "dbf6846c835accaf",
         "name": "function-breath-rate-c3",
-        "func": "if (msg.payload.measureType === \"BreathFrequency\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "func": "if (msg.payload.measureType === \"BreathFrequency\") {\n    const values = msg.payload.value;\n    if (values.length === 0) {\n        return null;\n    }\n    const avg = values.reduce((acc, v) => (v + acc), 0.) / values.length;\n    const userId = msg.payload.userId;\n    return {\n        payload: {\n            userId,\n            timestamp: msg.payload.date,\n            breathFrequency: avg,\n        }\n    };\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 320,
+        "x": 440,
+        "y": 240,
         "wires": [
             [
                 "6361da7b0cfc85d6",
-                "9f875ef5685a14e4",
-                "e1f2405528005fe9",
                 "28f1ee3225dcbdbf",
-                "5393b3de93aa4cec"
+                "ba687771d2768da2",
+                "a154591c9467fe4a"
             ]
         ]
     },
@@ -2692,7 +2690,7 @@
         "type": "debug",
         "z": "dbf6846c835accaf",
         "name": "debug-breath-rate-c3",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2700,8 +2698,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 820,
-        "y": 320,
+        "x": 760,
+        "y": 160,
         "wires": []
     },
     {
@@ -2709,21 +2707,20 @@
         "type": "function",
         "z": "dbf6846c835accaf",
         "name": "function-respiration-c3",
-        "func": "if (msg.payload.measureType === \"Respiration\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: 1, // val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "func": "if (msg.payload.measureType === \"Respiration\") {\n const values = msg.payload.value;\n    if (values.length === 0) {\n        return null;\n    }\n    const avg = values.reduce((acc, v) => (v + acc), 0.) / values.length;\n    const userId = msg.payload.userId;\n    return {\n        payload: {\n            userId,\n            timestamp: msg.payload.date,\n            respiration: avg,\n        },\n    };\n}\n\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 580,
+        "x": 440,
+        "y": 440,
         "wires": [
             [
                 "ed4d456bdfee5e86",
-                "d75477a8dd5f6f69",
-                "db6e472bc601395a",
-                "a00dbac8ff3c3211"
+                "ba687771d2768da2",
+                "28df16d058e689c8"
             ]
         ]
     },
@@ -2739,13 +2736,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
-        "y": 800,
+        "x": 450,
+        "y": 560,
         "wires": [
             [
                 "9cc81a19b3975140",
                 "ba4f724e910e762b",
-                "c095172a5d79840c"
+                "ba687771d2768da2"
             ]
         ]
     },
@@ -2753,20 +2750,20 @@
         "id": "2db025ba0b9c11b9",
         "type": "function",
         "z": "dbf6846c835accaf",
-        "d": true,
         "name": "function-position-c3",
-        "func": "if (msg.payload.measureType === \"Position\") {\n    return msg.payload.value.map(val => {\n        return {\n            payload: val,\n            userId: msg.payload.userId,\n            timestamp: msg.payload.date\n        };\n    });\n}\n\nreturn null;",
+        "func": "const id = msg.payload.userId;\nconst type = msg.payload.measureType;\nconst values = msg.payload.value;\nconst timestamp = msg.payload.date;\n\nif (!flow.get(\"posBuffer\")) {\n  flow.set(\"posBuffer\", {});\n}\nconst buffer = flow.get(\"posBuffer\");\n\nif (!buffer[id]) {\n  buffer[id] = {};\n}\nbuffer[id][type] = values;\nbuffer[id].timestamp = timestamp;\n\nif (\n  buffer[id][\"PhoneLatitude\"] &&\n  buffer[id][\"PhoneLongitude\"] &&\n  buffer[id][\"PhoneAltitude\"]\n) {\n  const lat = buffer[id][\"PhoneLatitude\"];\n  const lon = buffer[id][\"PhoneLongitude\"];\n  const alt = buffer[id][\"PhoneAltitude\"];\n\n  msg.payload = {\n    userId: id,\n    timestamp,\n    coordinates: `${lat},${lon},${alt}`\n  };\n\n  // Reset buffer\n  delete buffer[id][\"PhoneLatitude\"];\n  delete buffer[id][\"PhoneLongitude\"];\n  delete buffer[id][\"PhoneAltitude\"];\n  flow.set(\"posBuffer\", buffer);\n\n  return msg;\n}\n\nflow.set(\"posBuffer\", buffer);\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
-        "y": 960,
+        "x": 430,
+        "y": 340,
         "wires": [
             [
-                "409191eaba89764a"
+                "409191eaba89764a",
+                "ba687771d2768da2"
             ]
         ]
     },
@@ -2775,7 +2772,7 @@
         "type": "debug",
         "z": "dbf6846c835accaf",
         "name": "debug-resp-c3",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2783,8 +2780,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 760,
-        "y": 580,
+        "x": 740,
+        "y": 420,
         "wires": []
     },
     {
@@ -2792,7 +2789,7 @@
         "type": "debug",
         "z": "dbf6846c835accaf",
         "name": "debug-acc-c3",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2800,15 +2797,14 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 760,
-        "y": 920,
+        "x": 740,
+        "y": 520,
         "wires": []
     },
     {
         "id": "409191eaba89764a",
         "type": "debug",
         "z": "dbf6846c835accaf",
-        "d": true,
         "name": "debug-pos-c3",
         "active": true,
         "tosidebar": true,
@@ -2819,7 +2815,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 960,
+        "y": 300,
         "wires": []
     },
     {
@@ -2887,8 +2883,8 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 820,
-        "y": 380,
+        "x": 980,
+        "y": 180,
         "wires": []
     },
     {
@@ -2929,8 +2925,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 820,
-        "y": 440,
+        "x": 980,
+        "y": 220,
         "wires": [
             []
         ]
@@ -2974,8 +2970,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 770,
-        "y": 700,
+        "x": 930,
+        "y": 480,
         "wires": [
             []
         ]
@@ -3022,8 +3018,8 @@
         "lineWidth": 3,
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 780,
-        "y": 640,
+        "x": 940,
+        "y": 440,
         "wires": []
     },
     {
@@ -3091,8 +3087,8 @@
         "lineWidth": "5",
         "bgcolorFromTheme": true,
         "diffCenter": "",
-        "x": 1030,
-        "y": 800,
+        "x": 1010,
+        "y": 560,
         "wires": []
     },
     {
@@ -3114,8 +3110,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 800,
-        "y": 800,
+        "x": 780,
+        "y": 560,
         "wires": [
             [
                 "f216efaf8e033a69"
@@ -3131,8 +3127,8 @@
         "links": [
             "2dfce3b8d0a7cbed"
         ],
-        "x": 695,
-        "y": 100,
+        "x": 675,
+        "y": 60,
         "wires": []
     },
     {
@@ -3142,69 +3138,64 @@
         "name": "link-out-breath-rate-c3",
         "mode": "link",
         "links": [],
-        "x": 735,
-        "y": 540,
+        "x": 675,
+        "y": 240,
         "wires": []
     },
     {
-        "id": "72eb904909563919",
-        "type": "mqtt out",
+        "id": "848f11aad43244b3",
+        "type": "change",
         "z": "dbf6846c835accaf",
-        "name": "mqtt-out-heartbeat-c3",
-        "topic": "sensor/howdy/heartbeat",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "d8df27e1727521fa",
-        "x": 780,
-        "y": 40,
-        "wires": []
+        "name": "getHeartRate",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.heartRate",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 730,
+        "y": 100,
+        "wires": [
+            [
+                "c8e2e5dd198c5359",
+                "56e3f62f5b16638f"
+            ]
+        ]
     },
     {
-        "id": "5393b3de93aa4cec",
-        "type": "mqtt out",
+        "id": "ba687771d2768da2",
+        "type": "function",
         "z": "dbf6846c835accaf",
-        "name": "mqtt-out-breathrate-c3",
-        "topic": "sensor/howdy/breathrate",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "d8df27e1727521fa",
-        "x": 820,
-        "y": 480,
-        "wires": []
+        "name": "setTopic",
+        "func": "msg.topic = `/Thingworx/${msg.payload.userId}/mqttMessage`;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 340,
+        "wires": [
+            [
+                "a7d630366ef8dddb",
+                "1096895e6c433611"
+            ]
+        ]
     },
     {
-        "id": "a00dbac8ff3c3211",
+        "id": "a7d630366ef8dddb",
         "type": "mqtt out",
         "z": "dbf6846c835accaf",
-        "name": "mqtt-out-respiration-c3",
-        "topic": "sensor/howdy/respiration",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "d8df27e1727521fa",
-        "x": 760,
-        "y": 740,
-        "wires": []
-    },
-    {
-        "id": "c095172a5d79840c",
-        "type": "mqtt out",
-        "z": "dbf6846c835accaf",
-        "name": "mqtt-out-acc-c3",
+        "name": "mqtt-thingworx",
         "topic": "",
         "qos": "",
         "retain": "",
@@ -3213,9 +3204,82 @@
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "bc626649c953509f",
-        "x": 780,
-        "y": 860,
+        "broker": "d8df27e1727521fa",
+        "x": 980,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "a154591c9467fe4a",
+        "type": "change",
+        "z": "dbf6846c835accaf",
+        "name": "getBreathFrequency",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.breathFrequency",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 200,
+        "wires": [
+            [
+                "9f875ef5685a14e4",
+                "e1f2405528005fe9"
+            ]
+        ]
+    },
+    {
+        "id": "28df16d058e689c8",
+        "type": "change",
+        "z": "dbf6846c835accaf",
+        "name": "getRespiration",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.respiration",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 460,
+        "wires": [
+            [
+                "db6e472bc601395a",
+                "d75477a8dd5f6f69"
+            ]
+        ]
+    },
+    {
+        "id": "1096895e6c433611",
+        "type": "debug",
+        "z": "dbf6846c835accaf",
+        "name": "mqtt-out-msg",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 970,
+        "y": 300,
         "wires": []
     },
     {
