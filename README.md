@@ -60,6 +60,6 @@ The project can integrate with Wokwi simulations for various sensors and utilize
 
 ## Author
 
-Sahar Ramezani Jolfaei
-Jean Carlo Meza
+- Sahar Ramezani Jolfaei
+- Jean Carlo Meza
 
