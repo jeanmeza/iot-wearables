@@ -1,117 +1,65 @@
-iot-wearables
-=============
+# IoT Wearables Project
 
-### About
+## Overview
 
+This project is a Node-RED application designed to simulate, process, and visualize data from IoT wearable sensors for cyclists. It provides a real-time monitoring dashboard for individual cyclists and aggregated team data, leveraging MQTT for communication.
 
-# Settings
+## Key Features
 
-1. change the setting.js file in ~/<your username>/.node-red/ path to this:
+*   **Multi-Cyclist Simulation**: Simulates realistic sensor data (GPS, speed, cadence, heart rate, breathing rate, stress level) for up to three cyclists.
+*   **Node-RED Flows**: Core logic for data generation, transformation, MQTT publishing, and dashboard integration is managed through Node-RED flows.
+*   **Real-time Dashboard**: Visualizes sensor data using a custom Node-RED dashboard, including a `MulticolorGauge.js` for enhanced data representation.
+*   **MQTT Integration**: Utilizes MQTT for seamless data streaming and communication between simulated sensors and the Node-RED application.
 
-```bash
-module.exports = {
-  httpStatic: '/home/<your username>/.node-red/projects/iot-wearables/public',
-  editorTheme: {
-    projects: {
-      enabled: true,
-    },
-  },
-};
-```
+## Project Structure
 
-2. Add the `public` directory provided in this project to `~/<your username>/.node-red/projects/iot-wearables` path if not already present.
-3. Wokwi gps generator: [https://wokwi.com/projects/435578598139787265](https://wokwi.com/projects/438187136719744001)
-4. Speed sensor: https://wokwi.com/projects/438185450258136065
-5. Cadence: https://wokwi.com/projects/438185826037399553
-6. Gear-ratio: https://wokwi.com/projects/438186215363214337
-7. Breath-rate: https://wokwi.com/projects/438184336445964289
-8. Heart-rate: https://wokwi.com/projects/438183875548528641
-9. MQTT Explorer is used to test the correctness of our mqtt code.
-10. This GitHub repo simulates Howdy Sensor: https://github.com/jeanmeza/iot-data-simulator
+*   `flows.json`: Main Node-RED flow definitions.
+*   `package.json`: Project metadata and Node-RED dependencies.
+*   `public/`: Contains custom static assets for the dashboard, including `MulticolorGauge.js`.
 
-## Wokwi (backup file)
+## Dependencies
 
-```bash
-#include "WiFi.h"
-#include "DHT.h"
-#include <PubSubClient.h>
+This project relies on Node-RED and the following Node-RED modules:
 
-#define SSID "Wokwi-GUEST"
-#define SSID_PASSWORD ""
+*   `node-red-dashboard`
+*   `node-red-contrib-web-worldmap`
+*   `node-red-contrib-ui-artless-gauge2`
 
-#define MQTT_SERVER "broker.hivemq.com"
-#define MQTT_PORT 1883
+## Setup and Usage
 
-#define DHTPIN 5
-#define DHTTYPE DHT22
+1.  **Install Node-RED**: If not already installed, follow the official Node-RED installation guide.
+2.  **Unzip Project**: Extract the project archive to your desired location.
+3.  **Install Dependencies**: Navigate to the project directory and run `npm install`.
+4.  **Configure Node-RED `settings.js`**: Update your Node-RED `settings.js` file to include the `public` directory as a static HTTP path and enable projects. Example configuration:
 
-#define MQTT_TOPIC "sensor/heart-rate"
+    ```javascript
+    module.exports = {
+      httpStatic: '/home/<your username>/.node-red/projects/iot-wearables/public',
+      editorTheme: {
+        projects: {
+          enabled: true,
+        },
+      },
+    };
+    ```
+    *   **Note**: Adjust the `httpStatic` path to your actual project location.
 
-DHT dht(DHTPIN, DHTTYPE);
-WiFiClient espClient;
-PubSubClient client(espClient);
+5.  **Start Node-RED**: Run `node-red` from your terminal.
+6.  **Load Project**: Import `flows.json` into your Node-RED editor if not automatically loaded.
+7.  **Access Dashboard**: Open `http://localhost:1880/ui` in your browser to view the real-time dashboard.
 
-const int ledPin = 4;
-int heartRate = 70, Sp02 = 95;
+## Wokwi and External Tools
 
-void setup_wifi() {
-  WiFi.begin(SSID, SSID_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-  }
-}
+The project can integrate with Wokwi simulations for various sensors and utilizes tools like MQTT Explorer for testing and the Howdy Sensor Simulator for additional data sources.
+Wokwi GPS generator (https://wokwi.com/projects/438187136719744001)
+Speed (https://wokwi.com/projects/438185450258136065)
+Cadence (https://wokwi.com/projects/438185826037399553)
+Gear-ratio (https://wokwi.com/projects/438186215363214337)
+Breath-rate (https://wokwi.com/projects/438184336445964289)
+Heart-rate (https://wokwi.com/projects/438183875548528641)
 
-void reconnect() {
-  while (!client.connected()) {
-    Serial.println("Attempting MQTT connection...");
-    String clientId = "ESP32Client-" + String(random(0xffff), HEX);
-    if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000);
-    }
-  }
-}
+## Author
 
-void setup() {
-  Serial.begin(115200);
-  pinMode(ledPin, OUTPUT);
-  setup_wifi();
-  dht.begin();
-  client.setServer(MQTT_SERVER, MQTT_PORT);
-}
+Sahar Ramezani Jolfaei
+Jean Carlo Meza
 
-void loop() {
-  if (!client.connected()) {
-    Serial.println("reconnecting...");
-    reconnect();
-  }
-  client.loop();
-
-  float temperature = dht.readTemperature();
-  float humidity = dht.readHumidity();
-
-  if (isnan(temperature) || isnan(humidity)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
-  }
-
-  String payload = String("{\"heartRate\":") + temperature +
-                  ",\"speed\":" + humidity + "}";
-
-  Serial.println(payload);
-
-  client.publish(MQTT_TOPIC, payload.c_str(), true);
-
-  if (temperature > 30) {
-    digitalWrite(ledPin, HIGH);
-  } else {
-    digitalWrite(ledPin, LOW);
-  }
-
-  delay(1000);
-}
-```
