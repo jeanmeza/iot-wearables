@@ -51,12 +51,12 @@ This project relies on Node-RED and the following Node-RED modules:
 ## Wokwi and External Tools
 
 The project can integrate with Wokwi simulations for various sensors and utilizes tools like MQTT Explorer for testing and the Howdy Sensor Simulator for additional data sources.
-Wokwi GPS generator (https://wokwi.com/projects/438187136719744001)
-Speed (https://wokwi.com/projects/438185450258136065)
-Cadence (https://wokwi.com/projects/438185826037399553)
-Gear-ratio (https://wokwi.com/projects/438186215363214337)
-Breath-rate (https://wokwi.com/projects/438184336445964289)
-Heart-rate (https://wokwi.com/projects/438183875548528641)
+- Wokwi GPS generator (https://wokwi.com/projects/438187136719744001)
+- Speed (https://wokwi.com/projects/438185450258136065)
+- Cadence (https://wokwi.com/projects/438185826037399553)
+- Gear-ratio (https://wokwi.com/projects/438186215363214337)
+- Breath-rate (https://wokwi.com/projects/438184336445964289)
+- Heart-rate (https://wokwi.com/projects/438183875548528641)
 
 ## Author
 
